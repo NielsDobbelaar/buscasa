@@ -1,57 +1,57 @@
-# Buscasa
+<a name="readme-top"></a>
 
-This template should help get you started developing with Vue 3 in Vite.
+<br />
+<div align="center">
+  <h1 align="center">Buscasa</h1>
+</div>
 
-## Recommended IDE Setup
+## About
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Buscasa is a mobile web application created to streamline searching voor homes om mobile devices. Buscasa was made as a group project for the University of Applied Sciences Leiden
 
-## Customize configuration
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Built With
 
-## Project Setup
+[![Vue][Vue.js]][Vue-url]
 
-```sh
-npm install
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Compile and Hot-Reload for Development
+## Getting Started
 
-```sh
-npm run dev
-```
+### Prerequisites
 
-### Compile and Minify for Production
+- npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-```sh
-npm run build
-```
+### Installation
 
-### Run Headed Component Tests with [Cypress Component Testing](https://on.cypress.io/component)
+1. Clone the repo
+   ```sh
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Insert your version of the data JSON file <!-- todo Add location of json file--> 
 
-```sh
-npm run test:unit:dev # or `npm run test:unit` for headless testing
-```
+4. Run the dev server
+   ```sh
+   npm run dev
+   ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```sh
-npm run test:e2e:dev
-```
+## Credits
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
+As mentioned above this is a group project for the University of Applied Sciences Leiden made by the contributers:
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+- [David Fraterman](https://github.com/davidfraterman)
+- [Niels Dobbelaar](https://github.com/NielsDobbelaar)
+- [Eva van Dongen](https://github.com/evavandongen)
 
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue-url]: https://vuejs.org/
