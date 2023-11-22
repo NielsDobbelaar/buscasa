@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-
+      <!-- todo Later kijken naar implementatie legenda -->
       <!-- <section className="legendSection">
         <div v-for="status in data.statuses" :key="status.id" className="legend">
           <div className="legendCircle" :style="{ backgroundColor: status.color }"></div>
