@@ -7,7 +7,7 @@
 
 ## About
 
-Buscasa is a mobile web application created to streamline searching voor homes om mobile devices. Buscasa was made as a group project for the University of Applied Sciences Leiden
+Buscasa is a mobile web application created to streamline searching for homes om mobile devices. Buscasa was made as a group project for the University of Applied Sciences Leiden
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
