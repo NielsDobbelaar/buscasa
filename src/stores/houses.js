@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
+import houseData from '../assets/data/wonen-in-de-kuil.json'
 
 // Storage for houses data
 export const useHousesStore = defineStore('houses', {
   state: () => {
     return {
-      houses: [1,2,3,4,5,7,7],
+      houses: houseData
     }
   },
   getters: {
     getHouses() {
       return this.houses
-    },
-  },
+    }
+  }
 })
