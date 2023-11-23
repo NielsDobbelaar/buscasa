@@ -4,12 +4,24 @@ import { defineStore } from 'pinia'
 export const useHousesStore = defineStore('houses', {
   state: () => {
     return {
-      houses: [1,2,3,4,5,7,7],
+      houses: [
+        {
+          id: 1,
+          name: 'Huis 1',
+        }, {
+          id: 2,
+          name: 'Huis 2',
+        }
+      ],
+      comparingIds: [1],
     }
   },
   getters: {
     getHouses() {
       return this.houses
+    },
+    getComparingIds() {
+      return this.comparingIds
     },
   },
 })
