@@ -16,16 +16,14 @@
           <div
             className="backgroundIMG"
             :style="{
-              width: zoom + 'px',
-              backgroundImage: 'url(' + data.layers[map].background.url + ')'
+              width: mapWidth,
+              backgroundImage: backgroundURL
             }"
           >
             <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in data.hotspots.filter((item) => {
-                  return item.layer_id === layer_id
-                })"
+                v-for="poly in hotspotsOnCurrentMap"
                 @click="polyClicked(poly.entity_id)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -35,7 +33,7 @@
             <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in initMap"
+                v-for="poly in initMap.data"
                 @click="polyClicked(poly.layer_pointer)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -57,8 +55,8 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import initMap from '../assets/data/initMap'
+import { ref, watch, onMounted, computed } from 'vue'
+import initMap from '../assets/data/initMap.json'
 import router from '../router/index'
 
 const { data } = defineProps(['data'])
@@ -67,6 +65,20 @@ const opacity = '5b'
 const zoom = ref(720)
 const map = ref(0)
 const layer_id = ref(data.layers[map.value].id)
+
+const mapWidth = computed(() => {
+  return zoom.value + 'px'
+})
+
+const backgroundURL = computed(() => {
+  return 'url(' + data.layers[map.value].background.url + ')'
+})
+
+const hotspotsOnCurrentMap = computed(() => {
+  return data.hotspots.filter((item) => {
+    return item.layer_id === layer_id.value
+  })
+})
 
 onMounted(() => {
   resetMap()
