@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import initMap from '../assets/data/initMap.json'
 import router from '../router/index'
 
@@ -64,7 +64,10 @@ const { data } = defineProps(['data'])
 const opacity = '5b'
 const zoom = ref(720)
 const map = ref(0)
-const layer_id = ref(data.layers[map.value].id)
+
+const layer_id = computed(() => {
+  return data.layers[map.value].id
+})
 
 const mapWidth = computed(() => {
   return zoom.value + 'px'
@@ -118,10 +121,6 @@ const findPlotsAvailable = (section) => {
   if (voorbereiden) return data.statuses['voorbereiden-start-verkoop'].color
   return data.statuses.verkocht.color
 }
-
-watch(map, () => {
-  layer_id.value = data.layers[map.value].id
-})
 
 const getPolygonColor = (plotID) => {
   if (map.value === 0) {
