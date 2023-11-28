@@ -2,20 +2,32 @@
   <section>
     Woningzoeker
     <br>
-    Store houses: {{ houses }}
-  </section>
 
-  <FilterOverlay />
+    <button @click="setFilterOverlay(true)">
+      Hier komt de filterknop
+    </button>
+
+    <HouseMap />
+
+    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen"
+      @closeFilterOverlay="setFilterOverlay(false)" />
+
+  </section>
 </template>
 
 <script setup>
+import HouseMap from '@/components/HouseMap.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
-import { useHousesStore } from '@/stores/houses'
+import { ref } from 'vue'
 
-const housesStore = useHousesStore()
-const houses = housesStore.getHouses
+// Filters
+const isFilterOverlayOpen = ref(false)
+
+const setFilterOverlay = (value) => {
+  isFilterOverlayOpen.value = value
+}
+
 </script>
-
 
 <style scoped>
 

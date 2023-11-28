@@ -1,27 +1,32 @@
 import { defineStore } from 'pinia'
+import houseData from '@/assets/data/wonen-in-de-kuil.json'
 
 // Storage for houses data
 export const useHousesStore = defineStore('houses', {
   state: () => {
     return {
-      houses: [
-        {
-          id: 1,
-          name: 'Huis 1',
-        }, {
-          id: 2,
-          name: 'Huis 2',
-        }
-      ],
-      comparingIds: [1],
+      houses: houseData.plots,
+      comparingNumbers: ['A001', 'A002'],
     }
   },
   getters: {
     getHouses() {
       return this.houses
     },
-    getComparingIds() {
-      return this.comparingIds
+    getCompareNumbers() {
+      return this.comparingNumbers
+    },
+  },
+  actions: {
+    addCompareNumber(number) {
+      this.comparingNumbers.push(number)
+    },
+    removeCompareNumber(number) {
+      console.log(number, this.comparingNumbers);
+      this.comparingNumbers = this.comparingNumbers.filter(
+        (item) => item !== number
+        )
+        console.log(number, this.comparingNumbers);
     },
   },
 })

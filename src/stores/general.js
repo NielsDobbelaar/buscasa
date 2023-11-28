@@ -203,12 +203,16 @@ export const useGeneralStore = defineStore('general', {
                     "order": 2
                 }
             },
+            appliedFilters: [],
         }
     },
     getters: {
         // Filters
-        getFilters() {  
+        getFilters() {
             return this.filters
+        },
+        getAppliedFilters() {
+            return this.appliedFilters
         },
         getFilter(slug) {
             return this.filters.find(filter => filter.slug == slug)
@@ -226,6 +230,12 @@ export const useGeneralStore = defineStore('general', {
         },
     },
     actions: {
+        setAppliedFilters(data) {
+            this.appliedFilters = data
+        },
+        resetAppliedFilters() {
+            this.appliedFilters = [];
+        },
         setLanguage(lang) {
             this.language = lang
         },
