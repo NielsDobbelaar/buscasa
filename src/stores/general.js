@@ -15,7 +15,7 @@ export const useGeneralStore = defineStore('general', {
                     "values": {
                         "Te koop": "#74F570",
                         "In optie": "#FFE05B",
-                        "Verkocht": "#F57070",
+                        "verkocht": "#F57070",
                         "Voorbereiden start verkoop": "#6699cc"
                     },
                     "default": {
