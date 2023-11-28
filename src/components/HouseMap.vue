@@ -1,6 +1,8 @@
 <template>
   <article>
     <section className="woningZoekerSection">
+      FILTERS DATA: {{ appliedFilters }}
+
       <h2>Woningzoeker:</h2>
       <section className="changeMapButtonsSection">
         <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
@@ -56,10 +58,17 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import initMap from '../assets/data/initMap.json'
-import router from '../router/index'
+import initMap from '@/assets/data/initMap.json'
+import router from '@/router/index'
+
+import { useGeneralStore } from '@/stores/general'
+const generalStore = useGeneralStore()
 
 const { data } = defineProps(['data'])
+
+const appliedFilters = computed(() => {
+    return generalStore.getAppliedFilters
+})
 
 const opacity = '5b'
 const zoom = ref(720)

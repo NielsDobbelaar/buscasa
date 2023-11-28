@@ -13,16 +13,15 @@ const router = createRouter({
       component: HomeFinderView
     },
     {
-      path: '/woningzoeker/vergelijk',
-      name: 'woning',
-      component: CompareView,
-    },
-    {
       path: '/woningzoeker/:woningId',
       name: 'woning',
       component: SpecificHomeView
     },
-   
+    {
+      path: '/woningzoeker/vergelijk',
+      name: 'woning',
+      component: CompareView,
+    },
   ]
 })
 
