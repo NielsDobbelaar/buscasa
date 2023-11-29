@@ -121,8 +121,6 @@ onMounted(() => {
   resetMap()
 })
 
-// todo: add filtering to this function
-
 const findPlotsAvailable = (section) => {
   const hotspots = data.hotspots.filter((hotspot) => {
     return hotspot.layer_id === data.layers[section].id
