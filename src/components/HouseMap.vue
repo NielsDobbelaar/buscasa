@@ -33,7 +33,7 @@
             <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in initMap.data"
+                v-for="poly in filteredSections"
                 @click="polyClicked(poly.layer_pointer)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -79,13 +79,31 @@ const layer_id = computed(() => {
   return data.layers[map.value].id
 })
 
+const filteredSections = computed(() => {
+  const sections = initMap.data
+
+  const filteredSections = sections.filter((section) => {
+    const hotspotsInSection = data.hotspots.filter((item) => {
+      return item.layer_id === data.layers[section.layer_pointer].id
+    })
+
+    const filteredHotsports = hotspotsInSection.filter((hotspot) => {
+      return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+    })
+
+    return filteredHotsports.length > 0
+  })
+
+  return filteredSections
+})
+
 const filteredHotspotsOnCurrentMap = computed(() => {
   const hotspotsOnCurrentMap = data.hotspots.filter((item) => {
     return item.layer_id === layer_id.value
   })
 
   const filteredHotsports = hotspotsOnCurrentMap.filter((hotspot) => {
-    return hotspot.entity_id, checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+    return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
   })
 
   return filteredHotsports
@@ -110,7 +128,11 @@ const findPlotsAvailable = (section) => {
     return hotspot.layer_id === data.layers[section].id
   })
 
-  const plots = hotspots.map((hotspot) => {
+  const filteredHotsports = hotspots.filter((hotspot) => {
+    return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+  })
+
+  const plots = filteredHotsports.map((hotspot) => {
     return data.plots[data.plots.map((e) => e.id).indexOf(hotspot.entity_id)]
   })
 
