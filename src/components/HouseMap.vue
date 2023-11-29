@@ -79,6 +79,7 @@ const layer_id = computed(() => {
   return data.layers[map.value].id
 })
 
+//  Filters out sections on the main map that dont have plots because of filters
 const filteredSections = computed(() => {
   const sections = initMap.data
 
@@ -97,6 +98,7 @@ const filteredSections = computed(() => {
   return filteredSections
 })
 
+// removes hotspots/plots from map based on active filters
 const filteredHotspotsOnCurrentMap = computed(() => {
   const hotspotsOnCurrentMap = data.hotspots.filter((item) => {
     return item.layer_id === layer_id.value
@@ -121,6 +123,7 @@ onMounted(() => {
   resetMap()
 })
 
+// calculates color of section on the main map based on the status of not filtered out plots in section
 const findPlotsAvailable = (section) => {
   const hotspots = data.hotspots.filter((hotspot) => {
     return hotspot.layer_id === data.layers[section].id
