@@ -23,7 +23,7 @@
             <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in hotspotsOnCurrentMap"
+                v-for="poly in filteredHotspotsOnCurrentMap"
                 @click="polyClicked(poly.entity_id)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -59,6 +59,7 @@ import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
 import router from '@/router/index'
 import { useGeneralStore } from '@/stores/general'
+import checkFilter from '../utils/checkFilter'
 
 const generalStore = useGeneralStore()
 
@@ -70,43 +71,6 @@ const appliedFilters = computed(() => {
 
 const filters = generalStore.getFilters
 
-const checkFilter = (plotID) => {
-  const plot = data.plots[data.plots.map((e) => e.id).indexOf(plotID)]
-  if (!appliedFilters.value) return 'not loaded'
-  for (const appliedFilter in appliedFilters.value) {
-    const currentFilter = appliedFilters.value[appliedFilter]
-    const filterName = Object.keys(currentFilter)[0]
-    const filterType = filters.find((filter) => {
-      return filter.slug === filterName
-    })
-    switch (filterType.type.type) {
-      case 'status':
-      case 'checkbox':
-        if (currentFilter[filterName] && currentFilter[filterName].length !== 0) {
-          // console.log(filterName, currentFilter[filterName].includes(plot[filterName]))
-          if (!currentFilter[filterName].includes(plot[filterName])) return false
-        }
-        break
-      case 'range':
-        if (currentFilter[filterName] && currentFilter[filterName].length !== 0) {
-          // console.log(plot[filterName] > currentFilter[filterName])
-          if (!(plot[filterName] > currentFilter[filterName])) return false
-        }
-        break
-      case 'radio':
-        //hardcoded omdat radio kut is opgezet
-        if (currentFilter[filterName] && currentFilter[filterName].length !== 0) {
-          if (currentFilter[filterName] === '1 of meer' && plot[filterName] < 1) return false
-          if (currentFilter[filterName] === '2 of meer' && plot[filterName] < 2) return false
-        }
-        break
-    }
-  }
-  return true
-}
-
-console.log('response', checkFilter(251))
-
 const opacity = '5b'
 const zoom = ref(720)
 const map = ref(0)
@@ -115,18 +79,24 @@ const layer_id = computed(() => {
   return data.layers[map.value].id
 })
 
+const filteredHotspotsOnCurrentMap = computed(() => {
+  const hotspotsOnCurrentMap = data.hotspots.filter((item) => {
+    return item.layer_id === layer_id.value
+  })
+
+  const filteredHotsports = hotspotsOnCurrentMap.filter((hotspot) => {
+    return hotspot.entity_id, checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+  })
+
+  return filteredHotsports
+})
+
 const mapWidth = computed(() => {
   return zoom.value + 'px'
 })
 
 const backgroundURL = computed(() => {
   return 'url(' + data.layers[map.value].background.url + ')'
-})
-
-const hotspotsOnCurrentMap = computed(() => {
-  return data.hotspots.filter((item) => {
-    return item.layer_id === layer_id.value
-  })
 })
 
 onMounted(() => {

@@ -13,10 +13,10 @@ export const useGeneralStore = defineStore('general', {
                     "visible": 1,
                     "open": 1,
                     "values": {
-                        "Te koop": "#74F570",
-                        "In optie": "#FFE05B",
+                        "te-koop": "#74F570",
+                        "in-optie": "#FFE05B",
                         "verkocht": "#F57070",
-                        "Voorbereiden start verkoop": "#6699cc"
+                        "voorbereiden start verkoop": "#6699cc"
                     },
                     "default": {
                         "Te koop": "#74F570",
