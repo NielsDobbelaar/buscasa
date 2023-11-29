@@ -1,8 +1,6 @@
 <template>
   <article>
     <section className="woningZoekerSection">
-      FILTERS DATA: {{ appliedFilters }}
-
       <h2>Woningzoeker:</h2>
       <section className="changeMapButtonsSection">
         <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
@@ -25,7 +23,7 @@
             <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in hotspotsOnCurrentMap"
+                v-for="poly in filteredHotspotsOnCurrentMap"
                 @click="polyClicked(poly.entity_id)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -35,7 +33,7 @@
             <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
               <polygon
                 class="trace"
-                v-for="poly in initMap.data"
+                v-for="poly in filteredSections"
                 @click="polyClicked(poly.layer_pointer)"
                 :key="poly.svg"
                 :points="poly.svg"
@@ -60,15 +58,18 @@
 import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
 import router from '@/router/index'
-
 import { useGeneralStore } from '@/stores/general'
+import checkFilter from '@/utils/checkFilter'
+
 const generalStore = useGeneralStore()
 
 const { data } = defineProps(['data'])
 
 const appliedFilters = computed(() => {
-    return generalStore.getAppliedFilters
+  return generalStore.getAppliedFilters
 })
+
+const filters = generalStore.getFilters
 
 const opacity = '5b'
 const zoom = ref(720)
@@ -76,6 +77,38 @@ const map = ref(0)
 
 const layer_id = computed(() => {
   return data.layers[map.value].id
+})
+
+//  Filters out sections on the main map that dont have plots because of filters
+const filteredSections = computed(() => {
+  const sections = initMap.data
+
+  const filteredSections = sections.filter((section) => {
+    const hotspotsInSection = data.hotspots.filter((item) => {
+      return item.layer_id === data.layers[section.layer_pointer].id
+    })
+
+    const filteredHotsports = hotspotsInSection.filter((hotspot) => {
+      return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+    })
+
+    return filteredHotsports.length > 0
+  })
+
+  return filteredSections
+})
+
+// removes hotspots/plots from map based on active filters
+const filteredHotspotsOnCurrentMap = computed(() => {
+  const hotspotsOnCurrentMap = data.hotspots.filter((item) => {
+    return item.layer_id === layer_id.value
+  })
+
+  const filteredHotsports = hotspotsOnCurrentMap.filter((hotspot) => {
+    return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+  })
+
+  return filteredHotsports
 })
 
 const mapWidth = computed(() => {
@@ -86,22 +119,21 @@ const backgroundURL = computed(() => {
   return 'url(' + data.layers[map.value].background.url + ')'
 })
 
-const hotspotsOnCurrentMap = computed(() => {
-  return data.hotspots.filter((item) => {
-    return item.layer_id === layer_id.value
-  })
-})
-
 onMounted(() => {
   resetMap()
 })
 
+// calculates color of section on the main map based on the status of not filtered out plots in section
 const findPlotsAvailable = (section) => {
   const hotspots = data.hotspots.filter((hotspot) => {
     return hotspot.layer_id === data.layers[section].id
   })
 
-  const plots = hotspots.map((hotspot) => {
+  const filteredHotsports = hotspots.filter((hotspot) => {
+    return checkFilter(data, appliedFilters, filters, hotspot.entity_id)
+  })
+
+  const plots = filteredHotsports.map((hotspot) => {
     return data.plots[data.plots.map((e) => e.id).indexOf(hotspot.entity_id)]
   })
 
