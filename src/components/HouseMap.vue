@@ -59,7 +59,7 @@ import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
 import router from '@/router/index'
 import { useGeneralStore } from '@/stores/general'
-import checkFilter from '../utils/checkFilter'
+import checkFilter from '@/utils/checkFilter'
 
 const generalStore = useGeneralStore()
 
