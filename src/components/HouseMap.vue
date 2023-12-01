@@ -174,7 +174,8 @@ const zoomInOut = (increment) => {
 }
 </script>
 
-<style>
+<style scoped>
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
