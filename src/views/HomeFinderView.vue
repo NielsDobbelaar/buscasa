@@ -1,8 +1,10 @@
 <template>
   <section>
     Woningzoeker FILTERS DATA: {{ appliedFilters }}
+    <button @click="setDisplayType()">lijst/map switcher</button>
     <br />
-    <HouseMap v-if="houses" :data="houses" />
+    <HouseMap v-if="canShowHouses" :data="houses" />
+    <ListView v-if="canShowListView" :data="houses" />
 
     <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
 
@@ -17,6 +19,7 @@
 
 <script setup>
 import HouseMap from '@/components/HouseMap.vue'
+import ListView from '@/components/ListView.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
 import { ref, computed } from 'vue'
 import { useHousesStore } from '@/stores/houses'
@@ -34,7 +37,27 @@ const setFilterOverlay = (value) => {
   isFilterOverlayOpen.value = value
 }
 
+// map / lijstweergave switch
+// 0 is map - 1 is lijstweergave
+const currentView = ref(0)
+
+const setDisplayType = () => {
+  if (currentView.value === 0) {
+    currentView.value = 1
+    return
+  }
+  currentView.value = 0
+}
+
 const houses = housesStore.getHouses
+
+const canShowHouses = computed(() => {
+  return houses && currentView.value === 0
+})
+
+const canShowListView = computed(() => {
+  return houses && currentView.value === 1
+})
 
 const appliedFilters = computed(() => {
   return generalStore.getAppliedFilters
