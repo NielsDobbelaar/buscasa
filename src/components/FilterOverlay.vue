@@ -107,9 +107,17 @@ initializeFilterObject()
 
 <style scoped>
 .filterOverlay__wrapper {
-    border: 1px solid red;
     padding: 1rem;
-    margin: 1rem;
+    background-color: var(--clr-white);
+    color: var(--clr-primary);
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .filterValues {
