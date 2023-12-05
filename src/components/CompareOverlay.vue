@@ -25,7 +25,7 @@
                                 Meer info
                             </button>
                             <button class="comparison__houseCardRemoveHouse">
-                                <Icon icon="mingcute:close-line" height="30" @click="removeFromComparison(house.number)" />
+                                <Icon icon="mingcute:close-line" height="30" @click="removeFromComparison(house.id)" />
                             </button>
                         </section>
                     </section>
@@ -48,35 +48,14 @@
                             </p>
                         </section>
                     </section>
+                   
                 </section>
+                <section >
+                        <p class="comparison__noHouses" v-if="housesToShow.length === 0">
+                            Select houses to compare for them to show up here.
+                        </p>
+                    </section>
             </section>
-
-            <!-- <section class="comparison">
-                <h1>Compare tool ({{ comparingNumbers.length }})</h1>
-                <table v-if="comparingNumbers.length > 0">
-                    <thead>
-                        <tr>
-                            <th>Apprt. Number</th>
-                            <th v-for="nr in comparingNumbers" :key="nr">
-                                {{ nr }} <p @click="removeFromComparison(nr)" class="removeFromComparison">remove</p>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(label, key) in Object.keys(housesToShow[0])" :key="key">
-                            <td>{{ label }}</td>
-                            <td v-for="house in housesToShow" :key="house.number">
-                                {{ house[label] }}
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-                <section class="error-msg" v-else>
-                    Select houses to compare for them to show up here.
-                </section>
-            </section> -->
-
         </section>
     </dialog>
 </template>
@@ -107,6 +86,8 @@ const propertyKey = (key) => {
     // all _ to spaces and all words to first letter capitalized
     return key.replace(/_/g, ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 }
+
+// value formatting per row
 const formatValue = (value, key) => {
 
     if(currencyFormatting.value.includes(key) && typeof value === 'number') {
@@ -129,8 +110,6 @@ const comparingNumbers = computed(() => {
     return housesStore.getCompareNumbers
 })
 
-// housesToShow.value = houses.filter(house => comparingNumbers.includes(house.number))
-
 // Gets the house data by id of the selected houses to compare
 const getComparisonHouseData = () => {
     housesToShow.value = []
@@ -148,13 +127,8 @@ const getComparisonHouseData = () => {
                 status: status,
                 ...houseInStore
             }
-
-
-
-
         }
     }
-
 }
 
 // close
@@ -175,6 +149,12 @@ getComparisonHouseData()
 </script>
 
 <style scoped>
+.comparison__noHouses {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 2rem;
+
+}
 .comparison__housePropertyStatus {
     height: 0.75rem;
   width: 0.75rem;
@@ -253,8 +233,8 @@ getComparisonHouseData()
 
 .comparison__houseCardNumber {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 5px;
+    left: -1px;
     background-color: var(--clr-primary);
     color: var(--clr-white);
     padding: 0.25rem 0.5rem;
@@ -302,7 +282,6 @@ getComparisonHouseData()
     cursor: pointer;
 }
 
-.comparison__container {}
 
 .comparison__headerTitle {
     font-size: 1.75rem;
@@ -339,19 +318,6 @@ h1 {
     margin-top: 1rem;
 }
 
-.removeFromComparison {
-    color: red;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-weight: lighter;
-    text-decoration: underline;
-}
-
-.error-msg {
-    text-align: center;
-    margin-top: 4rem;
-    font-size: 1rem;
-}
 
 .comparison {
     padding: 2rem;
@@ -362,26 +328,4 @@ h1 {
     gap: 1.25rem;
     /* Add horizontal scroll for small screens */
 }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: grey;
-}
-
-/* Highlighting logic */
-.highlight {
-    font-weight: bold;
-    color: #007bff;
-    /* Highlight color */
-}</style>
+</style>
