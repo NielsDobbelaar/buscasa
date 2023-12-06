@@ -81,7 +81,8 @@ const layer_id = computed(() => {
 
 //  Filters out sections on the main map that dont have plots because of filters
 const filteredSections = computed(() => {
-  const sections = initMap.data
+  const sections = initMap
+  console.log('section', sections);
 
   const filteredSections = sections.filter((section) => {
     const hotspotsInSection = data.hotspots.filter((item) => {
