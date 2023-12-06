@@ -1,27 +1,46 @@
 <template>
-  <section>
-    Woningzoeker FILTERS DATA: {{ appliedFilters }}
+  <section class="woningzoeker">
+  <Header/>
+
+    Woningzoeker
+
     <button @click="setDisplayType()">lijst/map switcher</button>
-    <br />
+    <br>
     <HouseMap v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
-
-    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
+    
+    <button @click="setFilterOverlay(true)">
+      Hier komt de filterknop
+    </button>
+    <button @click="setCompareOverlay(true)">
+      Hier komt de compare knop
+    </button>
 
     <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
+    
+    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen"
+    @closeFilterOverlay="setFilterOverlay(false)" />
+
+    <CompareOverlay :isCompareOverlayOpen="isCompareOverlayOpen"
+    @closeCompareOverlay="setCompareOverlay(false)" />
+    
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
       @closeFilterOverlay="setFilterOverlay(false)"
     />
+
+    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
   </section>
 </template>
 
 <script setup>
+import Header from '@/components/Header.vue'
 import HouseMap from '@/components/HouseMap.vue'
 import ListView from '@/components/ListView.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
 import { ref, computed } from 'vue'
+import CompareOverlay from '@/components/CompareOverlay.vue'
 import { useHousesStore } from '@/stores/houses'
 import { useGeneralStore } from '@/stores/general'
 
@@ -32,9 +51,13 @@ const housesStore = useHousesStore()
 
 // Filters
 const isFilterOverlayOpen = ref(false)
+const isCompareOverlayOpen = ref(false)
 
 const setFilterOverlay = (value) => {
   isFilterOverlayOpen.value = value
+}
+const setCompareOverlay = (value) => {
+  isCompareOverlayOpen.value = value
 }
 
 // map / lijstweergave switch
@@ -64,4 +87,8 @@ const appliedFilters = computed(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.woningzoeker {
+  position: relative;
+}
+</style>
