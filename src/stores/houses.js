@@ -16,6 +16,9 @@ export const useHousesStore = defineStore('houses', {
     getCompareNumbers() {
       return this.comparingNumbers
     },
+    getHouseById: (state) => (id) => {
+      return state.houses.plots.find((house) => house.id === id)
+    },
   },
   actions: {
     addCompareNumber(number) {
