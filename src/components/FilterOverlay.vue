@@ -49,13 +49,14 @@
       <section class="filterValues" v-if="filter.type.type === 'radio'">
         <section class="filterValue" v-for="value in filter.values" :key="value">
           <input
+            class="invisibleInput"
             v-model="appliedFilters[i][filter.slug]"
             type="radio"
             :id="value"
             :name="filter.slug"
             :value="value"
           />
-          <label :for="value">{{ value }}</label>
+          <label class="radioLabel" :for="value">{{ value }}</label>
         </section>
       </section>
 
@@ -131,17 +132,17 @@ initializeFilterObject()
 
 <style scoped>
 .filterOverlay__wrapper {
-    padding: 1rem;
-    background-color: var(--clr-white);
-    color: var(--clr-primary);
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    overflow-y: auto;
-    overflow-x: hidden;
+  padding: 1rem;
+  background-color: var(--clr-white);
+  color: var(--clr-primary);
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .filterValues {
@@ -149,5 +150,26 @@ initializeFilterObject()
   flex-direction: row;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.invisibleInput {
+  display: none;
+}
+
+.radioLabel {
+  display: flex;
+  color: #283040;
+  align-items: center;
+  background: white;
+  border: 1px solid #283040;
+  text-align: center;
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 100%;
+}
+
+input[type='radio']:checked + .radioLabel {
+  background: #283040;
+  color: white;
 }
 </style>
