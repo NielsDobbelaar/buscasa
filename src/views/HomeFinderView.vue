@@ -2,7 +2,7 @@
   <section class="woningzoeker">
     <Header />
 
-    Woningzoeker
+    Woningzoeker applied filters {{ appliedFilters }}
 
     <button @click="setDisplayType()">lijst/map switcher</button>
     <br />
