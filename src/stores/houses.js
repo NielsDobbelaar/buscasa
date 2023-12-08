@@ -6,7 +6,7 @@ export const useHousesStore = defineStore('houses', {
   state: () => {
     return {
       houses: houseData,
-      comparingNumbers: [3977, 3161, 3181, 3183, 385, 379],
+      comparingNumbers: [3977, 3161, 3181, 3183],
     }
   },
   getters: {
