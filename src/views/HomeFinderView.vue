@@ -20,8 +20,10 @@
 
     <CompareOverlay :isCompareOverlayOpen="isCompareOverlayOpen" @closeCompareOverlay="setCompareOverlay(false)" />
 
-    <SingleHouseOverlay :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
-      @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977"/>
+    <transition name="from-bottom" mode="both">
+      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
+        @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
+    </transition>
   </section>
 </template>
 
@@ -40,7 +42,11 @@ const housesStore = useHousesStore()
 // Filters
 const isFilterOverlayOpen = ref(false)
 const isCompareOverlayOpen = ref(false)
-const isSingleHouseOverlayOpen = ref(true)
+const isSingleHouseOverlayOpen = ref(false)
+
+setTimeout(() => {
+  isSingleHouseOverlayOpen.value = true
+}, 1000)
 
 const setFilterOverlay = (value) => {
   isFilterOverlayOpen.value = value
@@ -57,6 +63,30 @@ const houses = housesStore.getHouses
 </script>
 
 <style scoped>
+.from-bottom-enter-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.from-bottom-enter-from {
+  transform: translateY(100%);
+}
+
+.from-bottom-enter-to {
+  transform: translateY(0);
+}
+
+.from-bottom-leave-from {
+  transform: translateY(0);
+}
+
+.from-bottom-leave-to {
+  transform: translateY(100%);
+}
+
+.from-bottom-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
 .woningzoeker {
   position: relative;
 }
