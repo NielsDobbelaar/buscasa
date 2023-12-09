@@ -24,11 +24,6 @@
       @closeCompareOverlay="setCompareOverlay(false)"
     />
 
-    <FilterOverlay
-      :isFilterOverlayOpen="isFilterOverlayOpen"
-      @closeFilterOverlay="setFilterOverlay(false)"
-    />
-
     <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
   </section>
 </template>

@@ -74,7 +74,7 @@
           <input
             class="invisibleInput"
             v-model="appliedFilters[i][filter.slug]"
-            type="checkbox"
+            type="radio"
             :id="value"
             :name="value"
             :value="value"
@@ -178,6 +178,11 @@ initializeFilterObject()
 }
 
 input[type='radio']:checked + .radioCheckboxLabel {
+  background: #283040;
+  color: white;
+}
+
+input[type='checkbox']:checked + .radioCheckboxLabel {
   background: #283040;
   color: white;
 }
