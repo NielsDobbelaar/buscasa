@@ -1,15 +1,22 @@
 <template>
   <dialog :open="props.isFilterOverlayOpen" class="filterOverlay__wrapper">
     <!-- Heading -->
-    <section>
-      <h1>Filters dialog</h1>
-      <button @click="closeOverlay()">Close</button>
-      <button @click="initializeFilterObject()">Reset filters</button>
+    <section class="FiltersHeader">
+      <h1 class="FiltersHeader_heading">Filters dialog</h1>
+
+      <section class="FiltersHeader_buttonsSection">
+        <button class="FiltersHeader_buttonsSection_button" @click="initializeFilterObject()">
+          Reset filters
+        </button>
+        <button class="FiltersHeader_buttonsSection_button_icon" @click="closeOverlay()">
+          &#10005;
+        </button>
+      </section>
     </section>
 
     <!-- Filters -->
     <section v-for="(filter, i) in filterConfig" :key="filter.slug">
-      <p>
+      <p class="filterHeading">
         {{ filter.label }}
       </p>
 
@@ -19,13 +26,14 @@
       <section class="filterValues" v-if="filter.type.type === 'checkbox'">
         <section class="filterValue" v-for="value in filter.values" :key="value">
           <input
+            class="invisibleInput"
             type="checkbox"
             v-model="appliedFilters[i][filter.slug]"
             :id="value"
-            :name="value"
+            :name="filter.slug"
             :value="value"
           />
-          <label :for="value">{{ value }}</label>
+          <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
 
@@ -49,13 +57,14 @@
       <section class="filterValues" v-if="filter.type.type === 'radio'">
         <section class="filterValue" v-for="value in filter.values" :key="value">
           <input
+            class="invisibleInput"
             v-model="appliedFilters[i][filter.slug]"
             type="radio"
             :id="value"
             :name="filter.slug"
             :value="value"
           />
-          <label :for="value">{{ value }}</label>
+          <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
 
@@ -63,13 +72,14 @@
       <section class="filterValues" v-if="filter.type.type === 'status'">
         <section class="filterValue" v-for="value in Object.keys(filter.values)" :key="value">
           <input
+            class="invisibleInput"
             v-model="appliedFilters[i][filter.slug]"
-            type="checkbox"
+            type="radio"
             :id="value"
             :name="value"
             :value="value"
           />
-          <label :for="value">{{ value }}</label>
+          <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
     </section>
@@ -131,17 +141,17 @@ initializeFilterObject()
 
 <style scoped>
 .filterOverlay__wrapper {
-    padding: 1rem;
-    background-color: var(--clr-white);
-    color: var(--clr-primary);
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    overflow-y: auto;
-    overflow-x: hidden;
+  padding: 1rem;
+  background-color: var(--clr-white);
+  color: var(--clr-primary);
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .filterValues {
@@ -149,5 +159,76 @@ initializeFilterObject()
   flex-direction: row;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.invisibleInput {
+  display: none;
+}
+
+.radioCheckboxLabel {
+  display: flex;
+  color: #283040;
+  align-items: center;
+  background: white;
+  border: 2px solid #283040;
+  text-align: center;
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 100%;
+}
+
+input[type='radio']:checked + .radioCheckboxLabel {
+  background: #283040;
+  color: white;
+}
+
+input[type='checkbox']:checked + .radioCheckboxLabel {
+  background: #283040;
+  color: white;
+}
+.filterHeading {
+  font-weight: 500;
+  font-size: 20px;
+  margin-top: 1rem;
+}
+
+.FiltersHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.FiltersHeader_heading {
+  font-weight: 700;
+  font-size: 25px;
+  margin-top: 1rem;
+  margin: 0;
+}
+
+.FiltersHeader_buttonsSection {
+  display: flex;
+  width: 50%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.FiltersHeader_buttonsSection_button {
+  height: 2rem;
+  padding: 0.25rem;
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 15px;
+}
+
+.FiltersHeader_buttonsSection_button_icon {
+  height: 3rem;
+  aspect-ratio: 1/1;
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 25px;
 }
 </style>

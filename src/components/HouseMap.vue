@@ -8,10 +8,6 @@
         </button>
       </section>
       <div className="wrapper">
-        <section className="zoomButtonsSection">
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(false)">-</button>
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(true)">+</button>
-        </section>
         <div className="scrollWrapper" id="scroll">
           <div
             className="backgroundIMG"
@@ -42,6 +38,10 @@
             </svg>
           </div>
         </div>
+        <section className="zoomButtonsSection">
+          <button className="zoomButtonsSectionButton" @click="zoomInOut(false)">-</button>
+          <button className="zoomButtonsSectionButton" @click="zoomInOut(true)">+</button>
+        </section>
       </div>
       <!-- todo Later kijken naar implementatie legenda -->
       <!-- <section className="legendSection">
@@ -82,7 +82,7 @@ const layer_id = computed(() => {
 //  Filters out sections on the main map that dont have plots because of filters
 const filteredSections = computed(() => {
   const sections = initMap
-  console.log('section', sections);
+  console.log('section', sections)
 
   const filteredSections = sections.filter((section) => {
     const hotspotsInSection = data.hotspots.filter((item) => {
@@ -208,7 +208,6 @@ const zoomInOut = (increment) => {
 </script>
 
 <style scoped>
-
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -310,7 +309,7 @@ article {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  z-index: 1;
+  z-index: 0;
   width: 110px;
   display: flex;
   flex-direction: row;
@@ -335,7 +334,7 @@ article {
   padding: 0 10px;
   top: 40px;
   left: 0px;
-  z-index: 1;
+  z-index: 0;
   width: 100%;
   display: flex;
   flex-direction: row;

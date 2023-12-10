@@ -1,33 +1,27 @@
 <template>
   <section class="woningzoeker">
-  <Header/>
+    <Header />
 
-    Woningzoeker
+    Woningzoeker applied filters {{ appliedFilters }}
 
     <button @click="setDisplayType()">lijst/map switcher</button>
-    <br>
+    <br />
     <HouseMap v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
-    
-    <button @click="setFilterOverlay(true)">
-      Hier komt de filterknop
-    </button>
-    <button @click="setCompareOverlay(true)">
-      Hier komt de compare knop
-    </button>
+
+    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
+    <button @click="setCompareOverlay(true)">Hier komt de compare knop</button>
 
     <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
-    
-    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen"
-    @closeFilterOverlay="setFilterOverlay(false)" />
-
-    <CompareOverlay :isCompareOverlayOpen="isCompareOverlayOpen"
-    @closeCompareOverlay="setCompareOverlay(false)" />
-    
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
       @closeFilterOverlay="setFilterOverlay(false)"
+    />
+
+    <CompareOverlay
+      :isCompareOverlayOpen="isCompareOverlayOpen"
+      @closeCompareOverlay="setCompareOverlay(false)"
     />
 
     <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
