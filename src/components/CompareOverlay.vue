@@ -5,7 +5,7 @@
             <section class="comparison__header">
                 <h1 class="comparison__headerTitle">Vergelijk - {{ housesToShow.length }}</h1>
                 <button class="comparison__closeButton" @click="closeOverlay()">
-                    <Icon icon="mingcute:close-line" height="30" @click="toggleNav()" />
+                    <Icon icon="mingcute:close-line" height="30" />
                 </button>
             </section>
 
@@ -17,7 +17,7 @@
                                 src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                                 alt="house image" />
                             <p class="comparison__houseCardNumber">
-                                {{ house.number }}
+                                {{ house.number || '-----' }}
                             </p>
                         </section>
                         <section class="comparison__houseCardActions">
@@ -48,13 +48,13 @@
                             </p>
                         </section>
                     </section>
-                   
+
                 </section>
-                <section >
-                        <p class="comparison__noHouses" v-if="housesToShow.length === 0">
-                            Select houses to compare for them to show up here.
-                        </p>
-                    </section>
+                <section>
+                    <p class="comparison__noHouses" v-if="housesToShow.length === 0">
+                        Select houses to compare for them to show up here.
+                    </p>
+                </section>
             </section>
         </section>
     </dialog>
@@ -76,8 +76,8 @@ const emit = defineEmits(['closeFilterOverlay'])
 const props = defineProps(['isCompareOverlayOpen'])
 
 // Show houses in store
-const housesToShow = ref([])
-const allowedProperties = ref(['bedrooms', 'description', 'from_price', 'to_price', 'status', 'energy_class', 'house_type', 'living_surface', 'parking_count', 'parking_description', 'parking_value', 'plot_surface', 'price', 'room_count', 'street', 'type', 'volume_unit', 'volume_external'])
+// const housesToShow = ref([])
+const allowedProperties = ref(['status', 'type', 'house_type', 'price','living_surface', 'plot_surface', 'room_count',  'from_price', 'to_price',  'parking_count', 'parking_description', 'parking_value', 'bedrooms', 'number', 'id'])
 const squaredMeterFormatting = ref(['living_surface', 'plot_surface']);
 const currencyFormatting = ref(['price', 'from_price', 'to_price', 'parking_value']);
 
@@ -90,13 +90,13 @@ const propertyKey = (key) => {
 // value formatting per row
 const formatValue = (value, key) => {
 
-    if(currencyFormatting.value.includes(key) && typeof value === 'number') {
+    if (currencyFormatting.value.includes(key) && typeof value === 'number') {
         return Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(value)
-    } else if(squaredMeterFormatting.value.includes(key)) {
+    } else if (squaredMeterFormatting.value.includes(key)) {
         return value + ' m²'
     }
 
-    if(typeof value === 'string') {
+    if (typeof value === 'string') {
 
         // first letter of string to uppercase
         return value.charAt(0).toUpperCase() + value.slice(1);
@@ -110,26 +110,61 @@ const comparingNumbers = computed(() => {
     return housesStore.getCompareNumbers
 })
 
-// Gets the house data by id of the selected houses to compare
-const getComparisonHouseData = () => {
-    housesToShow.value = []
+// houses to show
+const housesToShow = computed(() => {
+    let housesToShow = []
 
     for (let i = 0; i < houses.plots.length; i++) {
         const houseInStore = houses.plots[i];
+
         if (comparingNumbers.value.includes(houseInStore.id)) {
-            housesToShow.value.push(houseInStore)
 
-            // set the status key to be the first in the object
-            const status = houseInStore.status
-            delete houseInStore.status
+            housesToShow.push(houseInStore)
 
-            housesToShow.value[housesToShow.value.length - 1] = {
-                status: status,
-                ...houseInStore
-            }
+            // put the key values in the order of allowedProperties
+            const ordered = {}
+            allowedProperties.value.forEach((key) => {
+                ordered[key] = housesToShow[housesToShow.length - 1][key] || '-'
+            })
+
+            housesToShow[housesToShow.length - 1] = ordered
         }
     }
-}
+
+    return housesToShow
+})
+
+// Gets the house data by id of the selected houses to compare
+// const getComparisonHouseData = () => {
+//     housesToShow.value = []
+
+//     for (let i = 0; i < houses.plots.length; i++) {
+//         const houseInStore = houses.plots[i];
+//         if (comparingNumbers.value.includes(houseInStore.id)) {
+//             housesToShow.value.push(houseInStore)
+
+//             // set the status key to be the first in the object
+//             const status = houseInStore.status
+//             delete houseInStore.status
+
+//             housesToShow.value[housesToShow.value.length - 1] = {
+//                 status: status,
+//                 ...houseInStore
+//             }
+
+
+//         }
+//     }
+
+
+//     // put the key values in the order of allowedProperties
+//     const ordered = {}
+//     allowedProperties.value.forEach((key) => {
+//         ordered[key] = housesToShow.value[housesToShow.value.length - 1][key]
+//     })
+
+//     housesToShow.value[housesToShow.value.length - 1] = ordered
+// }
 
 // close
 // Overlay
@@ -141,10 +176,10 @@ const closeOverlay = () => {
 // Remove house from comparison
 const removeFromComparison = (nr) => {
     housesStore.removeCompareNumber(nr)
-    getComparisonHouseData()
+    // getComparisonHouseData()
 }
 
-getComparisonHouseData()
+// getComparisonHouseData()
 
 </script>
 
@@ -155,20 +190,24 @@ getComparisonHouseData()
     margin-top: 2rem;
 
 }
+
 .comparison__housePropertyStatus {
     height: 0.75rem;
-  width: 0.75rem;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 0.25rem;
+    width: 0.75rem;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.25rem;
 }
+
 .red {
     background-color: red;
 }
+
 .green {
     background-color: green;
 }
+
 .orange {
     background-color: orange;
 }
@@ -323,7 +362,6 @@ h1 {
     padding: 2rem;
     overflow-x: auto;
     max-width: 100vw;
-    margin-bottom: 6rem;
     display: flex;
     gap: 1.25rem;
     /* Add horizontal scroll for small screens */
