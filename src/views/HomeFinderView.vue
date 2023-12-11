@@ -2,7 +2,7 @@
   <section class="woningzoeker">
     <Header />
 
-    Woningzoeker applied filters {{ appliedFilters }}
+    Woningzoeker
 
     <button @click="setDisplayType()">lijst/map switcher</button>
     <br />
@@ -11,8 +11,6 @@
 
     <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
     <button @click="setCompareOverlay(true)">Hier komt de compare knop</button>
-
-    <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
@@ -23,13 +21,10 @@
       :isCompareOverlayOpen="isCompareOverlayOpen"
       @closeCompareOverlay="setCompareOverlay(false)"
     />
-    
-     <transition name="from-bottom" mode="both">
-      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
-        @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
-    </transition>
 
-    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
+    <transition name="from-bottom" mode="both">
+      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" />
+    </transition>
   </section>
 </template>
 
@@ -47,27 +42,22 @@ import { useGeneralStore } from '@/stores/general'
 
 const generalStore = useGeneralStore()
 
-
 // Store
 const housesStore = useHousesStore()
 
 // Filters
 const isFilterOverlayOpen = ref(false)
 const isCompareOverlayOpen = ref(false)
-const isSingleHouseOverlayOpen = ref(false)
 
-setTimeout(() => {
-  isSingleHouseOverlayOpen.value = true
-}, 1000)
+const isSingleHouseOverlayOpen = computed(() => {
+  return generalStore.getIsSingleHouseOverlayOpen
+})
 
 const setFilterOverlay = (value) => {
   isFilterOverlayOpen.value = value
 }
 const setCompareOverlay = (value) => {
   isCompareOverlayOpen.value = value
-}
-const setSingleHouseOverlay = (value) => {
-  isSingleHouseOverlayOpen.value = value
 }
 
 // map / lijstweergave switch
@@ -90,10 +80,6 @@ const canShowHouses = computed(() => {
 
 const canShowListView = computed(() => {
   return houses && currentView.value === 1
-})
-
-const appliedFilters = computed(() => {
-  return generalStore.getAppliedFilters
 })
 </script>
 

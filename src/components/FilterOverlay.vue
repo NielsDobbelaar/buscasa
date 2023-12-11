@@ -74,7 +74,7 @@
           <input
             class="invisibleInput"
             v-model="appliedFilters[i][filter.slug]"
-            type="radio"
+            type="checkbox"
             :id="value"
             :name="value"
             :value="value"

@@ -2,11 +2,6 @@
   <article>
     <section className="woningZoekerSection">
       <h2>Woningzoeker:</h2>
-      <section className="changeMapButtonsSection">
-        <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
-          &lt;
-        </button>
-      </section>
       <div className="wrapper">
         <div className="scrollWrapper" id="scroll">
           <div
@@ -42,6 +37,11 @@
           <button className="zoomButtonsSectionButton" @click="zoomInOut(false)">-</button>
           <button className="zoomButtonsSectionButton" @click="zoomInOut(true)">+</button>
         </section>
+        <section className="changeMapButtonsSection">
+          <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
+            &lt;
+          </button>
+        </section>
       </div>
       <!-- todo Later kijken naar implementatie legenda -->
       <!-- <section className="legendSection">
@@ -57,7 +57,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
-import router from '@/router/index'
 import { useGeneralStore } from '@/stores/general'
 import checkFilter from '@/utils/checkFilter'
 
@@ -185,7 +184,9 @@ const polyClicked = (plotID) => {
     map.value = plotID
     return
   }
-  router.push('/woningzoeker/' + plotID)
+
+  generalStore.setSingleHouseOverlayId(plotID)
+  generalStore.setIsSingleHouseOverlayOpen(true)
 }
 
 const previousMap = () => {
@@ -332,7 +333,7 @@ article {
 .changeMapButtonsSection {
   position: absolute;
   padding: 0 10px;
-  top: 40px;
+  top: 20px;
   left: 0px;
   z-index: 0;
   width: 100%;

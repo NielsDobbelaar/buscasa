@@ -11,11 +11,14 @@
 </template>
 
 <script setup>
-import router from '@/router/index'
+import { useGeneralStore } from '@/stores/general'
 const { item } = defineProps(['item'])
 
+const generalStore = useGeneralStore()
+
 const navigateToPlot = (plotID) => {
-  router.push('/woningzoeker/' + plotID)
+  generalStore.setSingleHouseOverlayId(plotID)
+  generalStore.setIsSingleHouseOverlayOpen(true)
 }
 </script>
 
