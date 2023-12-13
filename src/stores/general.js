@@ -7,6 +7,18 @@ export const useGeneralStore = defineStore('general', {
             language: 'nl',
             isSingleHouseOverlayOpen: false,
             singleHouseOverlayId: null,
+            houseTypes: [
+                "Appartement",
+                "Dijkappartement",
+                "Dijkmaisonnette",
+                "Drive-in woning",
+                "Maisonnette",
+                "Parkappartement",
+                "Parkmaisonnette",
+                "Stadswoning",
+                "Terraswoning",
+                "Valleiwoning"
+            ],
             filters: [
                 {
                     "order": 1,
@@ -212,6 +224,9 @@ export const useGeneralStore = defineStore('general', {
         // Filters
         getFilters() {
             return this.filters
+        },
+        getHouseTypes() {
+            return this.houseTypes
         },
         getAppliedFilters() {
             return this.appliedFilters

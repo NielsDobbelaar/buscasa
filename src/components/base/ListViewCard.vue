@@ -1,11 +1,10 @@
 <template>
   <article className="cardWrapper">
     <section className="cardSection">
-      <h2>{{ item.number }}:</h2>
-      <p>{{ item.type }}</p>
+      <h2>{{ item }}:</h2>
     </section>
     <section className="cardSection">
-      <button @click="navigateToPlot(item.id)">detail pagina</button>
+      <button>detail pagina</button>
     </section>
   </article>
 </template>
@@ -15,11 +14,6 @@ import { useGeneralStore } from '@/stores/general'
 const { item } = defineProps(['item'])
 
 const generalStore = useGeneralStore()
-
-const navigateToPlot = (plotID) => {
-  generalStore.setSingleHouseOverlayId(plotID)
-  generalStore.setIsSingleHouseOverlayOpen(true)
-}
 </script>
 
 <style>
