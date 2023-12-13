@@ -2,10 +2,12 @@
   <footer class="footer">
     <section v-if="!props.isMapOpen" class="footerContent__wrapper">
       <button class="button solidButton">
-        <Icon class="menuButton" icon="material-symbols:help-outline" />Keuzehulp
+        <Icon class="menuButton" icon="material-symbols:help-outline" />
+        <p class="button_text">Keuzehulp</p>
       </button>
       <button class="button solidButton" @click="emit('lijstMapSwitch')">
-        <Icon class="menuButton" icon="mdi:home-city-outline" />Woningaanbod
+        <Icon class="menuButton" icon="mdi:home-city-outline" />
+        <p class="button_text">Woningaanbod</p>
       </button>
     </section>
 
@@ -65,7 +67,6 @@ footer {
 .iconOnlyButton {
   font-size: 1rem;
   border: 2px solid var(--clr-secondary);
-  font-weight: bold;
   padding: 0.3rem 0.3rem;
   border-radius: 5px;
   display: flex;
@@ -76,7 +77,6 @@ footer {
 .button {
   font-size: 1rem;
   border: 2px solid var(--clr-secondary);
-  font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   display: flex;
