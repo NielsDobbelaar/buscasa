@@ -1,22 +1,16 @@
 <template>
   <article className="cardWrapper">
     <section className="cardSection">
-      <h2>{{ item.number }}:</h2>
-      <p>{{ item.type }}</p>
+      <h2>{{ item }}:</h2>
     </section>
     <section className="cardSection">
-      <button @click="navigateToPlot(item.id)">detail pagina</button>
+      <button>detail pagina</button>
     </section>
   </article>
 </template>
 
 <script setup>
-import router from '@/router/index'
 const { item } = defineProps(['item'])
-
-const navigateToPlot = (plotID) => {
-  router.push('/woningzoeker/' + plotID)
-}
 </script>
 
 <style>

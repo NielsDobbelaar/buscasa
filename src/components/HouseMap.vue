@@ -1,69 +1,76 @@
 <template>
-  <article>
-    <section className="woningZoekerSection">
-      <h2>Woningzoeker:</h2>
-      <section className="changeMapButtonsSection">
-        <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
-          &lt;
+  <section className="woningZoekerSection">
+    <div className="wrapper">
+      <div className="scrollWrapper" id="scroll">
+        <div
+          className="backgroundIMG"
+          :style="{
+            width: mapWidth,
+            backgroundImage: backgroundURL
+          }"
+        >
+          <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
+            <polygon
+              class="trace"
+              v-for="poly in filteredHotspotsOnCurrentMap"
+              @click="polyClicked(poly.entity_id)"
+              :key="poly.svg"
+              :points="poly.svg"
+              :fill="getPolygonColor(poly.entity_id)"
+            />
+          </svg>
+          <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
+            <polygon
+              class="trace"
+              v-for="poly in filteredSections"
+              @click="polyClicked(poly.layer_pointer)"
+              :key="poly.svg"
+              :points="poly.svg"
+              :fill="getPolygonColor(poly.layer_pointer)"
+            />
+          </svg>
+        </div>
+      </div>
+      <section className="zoomButtonsSection">
+        <button
+          :disabled="zoom <= 1700"
+          className="zoomButtonsSectionButton"
+          @click="zoomInOut(false)"
+        >
+          -
+        </button>
+        <button
+          :disabled="zoom >= 2300"
+          className="zoomButtonsSectionButton"
+          @click="zoomInOut(true)"
+        >
+          +
         </button>
       </section>
-      <div className="wrapper">
-        <div className="scrollWrapper" id="scroll">
-          <div
-            className="backgroundIMG"
-            :style="{
-              width: mapWidth,
-              backgroundImage: backgroundURL
-            }"
-          >
-            <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
-              <polygon
-                class="trace"
-                v-for="poly in filteredHotspotsOnCurrentMap"
-                @click="polyClicked(poly.entity_id)"
-                :key="poly.svg"
-                :points="poly.svg"
-                :fill="getPolygonColor(poly.entity_id)"
-              />
-            </svg>
-            <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
-              <polygon
-                class="trace"
-                v-for="poly in filteredSections"
-                @click="polyClicked(poly.layer_pointer)"
-                :key="poly.svg"
-                :points="poly.svg"
-                :fill="getPolygonColor(poly.layer_pointer)"
-              />
-            </svg>
-          </div>
-        </div>
-        <section className="zoomButtonsSection">
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(false)">-</button>
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(true)">+</button>
-        </section>
-      </div>
-      <!-- todo Later kijken naar implementatie legenda -->
-      <!-- <section className="legendSection">
+      <section className="changeMapButtonsSection">
+        <button className="zoomButtonsSectionButton" @click="previousMap()">&lt;</button>
+      </section>
+    </div>
+    <!-- todo Later kijken naar implementatie legenda -->
+    <!-- <section className="legendSection">
         <div v-for="status in data.statuses" :key="status.id" className="legend">
           <div className="legendCircle" :style="{ backgroundColor: status.color }"></div>
           - {{ status.name }}
         </div>
       </section> -->
-    </section>
-  </article>
+  </section>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
-import router from '@/router/index'
 import { useGeneralStore } from '@/stores/general'
 import checkFilter from '@/utils/checkFilter'
 
 const generalStore = useGeneralStore()
 
 const { data } = defineProps(['data'])
+const emit = defineEmits(['closeMapView'])
 
 const appliedFilters = computed(() => {
   return generalStore.getAppliedFilters
@@ -72,7 +79,7 @@ const appliedFilters = computed(() => {
 const filters = generalStore.getFilters
 
 const opacity = '5b'
-const zoom = ref(720)
+const zoom = ref(1700)
 const map = ref(0)
 
 const layer_id = computed(() => {
@@ -82,7 +89,6 @@ const layer_id = computed(() => {
 //  Filters out sections on the main map that dont have plots because of filters
 const filteredSections = computed(() => {
   const sections = initMap
-  console.log('section', sections)
 
   const filteredSections = sections.filter((section) => {
     const hotspotsInSection = data.hotspots.filter((item) => {
@@ -175,8 +181,8 @@ const getPolygonColor = (plotID) => {
 const resetMap = () => {
   const scrollDiv = document.getElementById('scroll')
   if (scrollDiv) {
-    scrollDiv.scrollLeft = 155
-    zoom.value = 720
+    scrollDiv.scrollLeft = 630
+    zoom.value = 1700
   }
 }
 
@@ -185,23 +191,27 @@ const polyClicked = (plotID) => {
     map.value = plotID
     return
   }
-  router.push('/woningzoeker/' + plotID)
+
+  generalStore.setSingleHouseOverlayId(plotID)
+  generalStore.setIsSingleHouseOverlayOpen(true)
 }
 
 const previousMap = () => {
   if (map.value !== 0) {
     map.value = 0
     resetMap()
+  } else {
+    emit('closeMapView')
   }
 }
 
 const zoomInOut = (increment) => {
-  if (increment && zoom.value !== 1220) {
+  if (increment && zoom.value !== 2300) {
     zoom.value = zoom.value + 100
     return
   }
 
-  if (!increment && zoom.value !== 720) {
+  if (!increment && zoom.value !== 1700) {
     zoom.value = zoom.value - 100
   }
 }
@@ -230,39 +240,12 @@ const zoomInOut = (increment) => {
   }
 }
 
-article {
-  width: 100vw;
-  height: 80vh;
-  margin: 0 auto;
-}
-
 .titleSection {
   text-align: left;
 }
 
-.titleSection_Title {
-  margin-bottom: 0;
-  font-size: 150%;
-  color: #c69308;
-}
-
 .titleSection_Version {
   margin-top: 0;
-}
-
-.ResultatenSection {
-  margin: 0;
-  margin-bottom: 10vh;
-}
-
-.ResultatenSection_Button {
-  padding: 10px;
-  margin-top: 0;
-  border-radius: 3px;
-  font-size: 100%;
-  color: white;
-  background-color: #c69308;
-  border: 1px black;
 }
 
 .ResultatenSection_Title {
@@ -276,7 +259,7 @@ article {
 .wrapper {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 100%;
 }
 
 .scrollWrapper {
@@ -289,6 +272,7 @@ article {
 
 .woningZoekerSection {
   position: relative;
+  height: 100%;
 }
 
 .backgroundIMG {
@@ -317,6 +301,7 @@ article {
 }
 
 .zoomButtonsSectionButton {
+  display: block;
   font-size: 130%;
   width: 40px;
   height: 40px;
@@ -325,14 +310,18 @@ article {
   margin-left: 5px;
   color: white;
   text-align: center;
-  background-color: #c69308;
+  background-color: var(--clr-primary);
   border: 0;
+}
+
+.zoomButtonsSectionButton:disabled {
+  background-color: var(--clr-grey);
 }
 
 .changeMapButtonsSection {
   position: absolute;
   padding: 0 10px;
-  top: 40px;
+  top: 20px;
   left: 0px;
   z-index: 0;
   width: 100%;

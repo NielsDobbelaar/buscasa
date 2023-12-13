@@ -1,18 +1,8 @@
 <template>
+  <Header />
   <section class="woningzoeker">
-    <Header />
-
-    Woningzoeker applied filters {{ appliedFilters }}
-
-    <button @click="setDisplayType()">lijst/map switcher</button>
-    <br />
-    <HouseMap v-if="canShowHouses" :data="houses" />
+    <HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
-
-    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
-    <button @click="setCompareOverlay(true)">Hier komt de compare knop</button>
-
-    <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
@@ -23,14 +13,17 @@
       :isCompareOverlayOpen="isCompareOverlayOpen"
       @closeCompareOverlay="setCompareOverlay(false)"
     />
-    
-     <transition name="from-bottom" mode="both">
-      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
-        @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
-    </transition>
 
-    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
+    <transition name="from-bottom" mode="both">
+      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" />
+    </transition>
   </section>
+  <Footer
+    @openVergelijkingsTool="setCompareOverlay(true)"
+    @openFilterTool="setFilterOverlay(true)"
+    @lijstMapSwitch="setDisplayType()"
+    :isMapOpen="canShowHouses"
+  />
 </template>
 
 <script setup>
@@ -44,9 +37,9 @@ import { useHousesStore } from '@/stores/houses'
 
 import SingleHouseOverlay from '@/components/SingleHouseOverlay.vue'
 import { useGeneralStore } from '@/stores/general'
+import Footer from '@/components/Footer.vue'
 
 const generalStore = useGeneralStore()
-
 
 // Store
 const housesStore = useHousesStore()
@@ -54,11 +47,10 @@ const housesStore = useHousesStore()
 // Filters
 const isFilterOverlayOpen = ref(false)
 const isCompareOverlayOpen = ref(false)
-const isSingleHouseOverlayOpen = ref(false)
 
-setTimeout(() => {
-  isSingleHouseOverlayOpen.value = true
-}, 1000)
+const isSingleHouseOverlayOpen = computed(() => {
+  return generalStore.getIsSingleHouseOverlayOpen
+})
 
 const setFilterOverlay = (value) => {
   isFilterOverlayOpen.value = value
@@ -66,13 +58,10 @@ const setFilterOverlay = (value) => {
 const setCompareOverlay = (value) => {
   isCompareOverlayOpen.value = value
 }
-const setSingleHouseOverlay = (value) => {
-  isSingleHouseOverlayOpen.value = value
-}
 
 // map / lijstweergave switch
 // 0 is map - 1 is lijstweergave
-const currentView = ref(0)
+const currentView = ref(1)
 
 const setDisplayType = () => {
   if (currentView.value === 0) {
@@ -90,10 +79,6 @@ const canShowHouses = computed(() => {
 
 const canShowListView = computed(() => {
   return houses && currentView.value === 1
-})
-
-const appliedFilters = computed(() => {
-  return generalStore.getAppliedFilters
 })
 </script>
 
@@ -124,5 +109,7 @@ const appliedFilters = computed(() => {
 
 .woningzoeker {
   position: relative;
+  height: 82vh;
+  overflow: scroll;
 }
 </style>

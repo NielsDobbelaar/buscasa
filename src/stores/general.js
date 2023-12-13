@@ -5,6 +5,20 @@ export const useGeneralStore = defineStore('general', {
     state: () => {
         return {
             language: 'nl',
+            isSingleHouseOverlayOpen: false,
+            singleHouseOverlayId: null,
+            houseTypes: [
+                "Appartement",
+                "Dijkappartement",
+                "Dijkmaisonnette",
+                "Drive-in woning",
+                "Maisonnette",
+                "Parkappartement",
+                "Parkmaisonnette",
+                "Stadswoning",
+                "Terraswoning",
+                "Valleiwoning"
+            ],
             filters: [
                 {
                     "order": 1,
@@ -211,6 +225,9 @@ export const useGeneralStore = defineStore('general', {
         getFilters() {
             return this.filters
         },
+        getHouseTypes() {
+            return this.houseTypes
+        },
         getAppliedFilters() {
             return this.appliedFilters
         },
@@ -228,6 +245,12 @@ export const useGeneralStore = defineStore('general', {
         getLanguage() {
             return this.language
         },
+        getIsSingleHouseOverlayOpen() {
+            return this.isSingleHouseOverlayOpen
+        },
+        getSingleHouseOverlayId(){
+            return this.singleHouseOverlayId
+        },
     },
     actions: {
         setAppliedFilters(data) {
@@ -239,5 +262,11 @@ export const useGeneralStore = defineStore('general', {
         setLanguage(lang) {
             this.language = lang
         },
+        setIsSingleHouseOverlayOpen(value)  {
+            this.isSingleHouseOverlayOpen = value
+        },
+        setSingleHouseOverlayId(value) {
+            this.singleHouseOverlayId = value
+        }
     }
 })
