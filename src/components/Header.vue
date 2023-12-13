@@ -58,6 +58,7 @@ header {
   padding: 1rem;
   position: relative;
   z-index: 1;
+  height: 10vh;
 }
 
 .headerContent__wrapper {

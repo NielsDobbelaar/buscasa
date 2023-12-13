@@ -4,7 +4,6 @@
 
     Woningzoeker
 
-    <button @click="setDisplayType()">lijst/map switcher</button>
     <br />
     <HouseMap v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
@@ -25,6 +24,12 @@
     <transition name="from-bottom" mode="both">
       <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" />
     </transition>
+    <Footer
+      @openVergelijkingsTool="setCompareOverlay(true)"
+      @openFilterTool="setFilterOverlay(true)"
+      @lijstMapSwitch="setDisplayType"
+      :isMapOpen="canShowHouses"
+    />
   </section>
 </template>
 
@@ -39,6 +44,7 @@ import { useHousesStore } from '@/stores/houses'
 
 import SingleHouseOverlay from '@/components/SingleHouseOverlay.vue'
 import { useGeneralStore } from '@/stores/general'
+import Footer from '@/components/Footer.vue'
 
 const generalStore = useGeneralStore()
 
@@ -62,7 +68,7 @@ const setCompareOverlay = (value) => {
 
 // map / lijstweergave switch
 // 0 is map - 1 is lijstweergave
-const currentView = ref(0)
+const currentView = ref(1)
 
 const setDisplayType = () => {
   if (currentView.value === 0) {
@@ -110,5 +116,6 @@ const canShowListView = computed(() => {
 
 .woningzoeker {
   position: relative;
+  height: 100vh;
 }
 </style>
