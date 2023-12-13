@@ -98,11 +98,13 @@ const emit = defineEmits(['closeFilterOverlay'])
 const filterConfig = generalStore.getFilters
 
 // Filter event
-let appliedFilters = ref([])
+console.log('appliedfilters');
+let appliedFilters = ref(generalStore.getAppliedFilters)
 
 watch(
   appliedFilters,
   () => {
+    console.log('filt', appliedFilters.value);
     generalStore.setAppliedFilters(appliedFilters.value)
   },
   { deep: true }
@@ -134,6 +136,10 @@ const initializeFilterObject = () => {
       })
     }
   }
+}
+
+if(generalStore.amountOfAppliedFilters === 0) {
+  initializeFilterObject()
 }
 
 initializeFilterObject()

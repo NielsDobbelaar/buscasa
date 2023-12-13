@@ -130,6 +130,7 @@ document.addEventListener('click', function (event) {
     }
 });
 
+
 setTimeout(() => {
     // set backdrop
     document.querySelector('.singleHouseWrapper').style.backgroundColor = 'rgba(0, 0, 0, 0.401)';

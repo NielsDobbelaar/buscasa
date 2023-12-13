@@ -14,22 +14,19 @@
 
     <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
 
-    <FilterOverlay
-      :isFilterOverlayOpen="isFilterOverlayOpen"
-      @closeFilterOverlay="setFilterOverlay(false)"
-    />
+    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen" @closeFilterOverlay="setFilterOverlay(false)" />
 
-    <CompareOverlay
-      :isCompareOverlayOpen="isCompareOverlayOpen"
-      @closeCompareOverlay="setCompareOverlay(false)"
-    />
-    
-     <transition name="from-bottom" mode="both">
+    <CompareOverlay :isCompareOverlayOpen="isCompareOverlayOpen" @closeCompareOverlay="setCompareOverlay(false)" />
+
+    <KeuzeHulpOverlay v-if="isKeuzeHulpOverlayOpen" @closeKeuzeHulpOverlay="setKeuzeHulpOverlay(false)" />
+
+    <transition name="from-bottom" mode="both">
       <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
         @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
     </transition>
 
     <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
+    <button @click="setKeuzeHulpOverlay(true)">Hier komt de keuzehulpknop</button>
   </section>
 </template>
 
@@ -37,6 +34,7 @@
 import Header from '@/components/Header.vue'
 import HouseMap from '@/components/HouseMap.vue'
 import ListView from '@/components/ListView.vue'
+import KeuzeHulpOverlay from '@/components/KeuzeHulpOverlay.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
 import { ref, computed } from 'vue'
 import CompareOverlay from '@/components/CompareOverlay.vue'
@@ -55,6 +53,7 @@ const housesStore = useHousesStore()
 const isFilterOverlayOpen = ref(false)
 const isCompareOverlayOpen = ref(false)
 const isSingleHouseOverlayOpen = ref(false)
+const isKeuzeHulpOverlayOpen = ref(false)
 
 setTimeout(() => {
   isSingleHouseOverlayOpen.value = true
@@ -68,6 +67,9 @@ const setCompareOverlay = (value) => {
 }
 const setSingleHouseOverlay = (value) => {
   isSingleHouseOverlayOpen.value = value
+}
+const setKeuzeHulpOverlay = (value) => {
+  isKeuzeHulpOverlayOpen.value = value
 }
 
 // map / lijstweergave switch
