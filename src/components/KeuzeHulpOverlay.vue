@@ -23,9 +23,9 @@
                     <section class="filterValues" v-if="filter.type.type === 'checkbox'">
                         <section class="filterValue" v-for="value in filter.values" :key="value">
                             <input class="invisibleInput" type="checkbox"
-                                v-model="appliedFilters[currentStep - 1][filter.slug]" :id="value" :name="filter.slug"
+                                v-model="appliedFilters[currentStep - 1][filter.slug]" :id="value + 'keuzehulp'" :name="filter.slug + 'keuzehulp'"
                                 :value="value" />
-                            <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
+                            <label class="radioCheckboxLabel" :for="value + 'keuzehulp'">{{ value }}</label>
                         </section>
                     </section>
 
@@ -33,8 +33,8 @@
                     <section class="filterValues" v-if="filter.type.type === 'range'">
                         <!-- TODO: Misschien package voor gebruiken voor fancy slider met min en max? -->
                         <section>
-                            <input v-model="appliedFilters[currentStep - 1][filter.slug]" type="range" :id="filter.slug"
-                                :name="filter.slug" :min="filter.values.min" :max="filter.values.max"
+                            <input v-model="appliedFilters[currentStep - 1][filter.slug]" type="range" :id="filter.slug  + 'keuzehulp'"
+                                :name="filter.slug + 'keuzehulp'" :min="filter.values.min" :max="filter.values.max"
                                 :step="filter.values.stepSize" />
                         </section>
                     </section>
@@ -43,8 +43,8 @@
                     <section class="filterValues" v-if="filter.type.type === 'radio'">
                         <section class="filterValue" v-for="value in filter.values" :key="value">
                             <input class="invisibleInput" v-model="appliedFilters[currentStep - 1][filter.slug]"
-                                type="radio" :id="value" :name="filter.slug" :value="value" />
-                            <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
+                                type="radio" :id="value + 'keuzehulp'" :name="filter.slug + 'keuzehulp'" :value="value" />
+                            <label class="radioCheckboxLabel" :for="value + 'keuzehulp'">{{ value }}</label>
                         </section>
                     </section>
 
@@ -52,8 +52,8 @@
                     <section class="filterValues" v-if="filter.type.type === 'status'">
                         <section class="filterValue" v-for="value in Object.keys(filter.values)" :key="value">
                             <input class="invisibleInput" v-model="appliedFilters[currentStep - 1][filter.slug]"
-                                type="radio" :id="value" :name="value" :value="value" />
-                            <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
+                                type="radio" :id="value + 'keuzehulp'" :name="value + 'keuzehulp'" :value="value" />
+                            <label class="radioCheckboxLabel" :for="value + 'keuzehulp'">{{ value }}</label>
                         </section>
                     </section>
                 </section>
@@ -83,18 +83,12 @@
 import { watch } from 'vue'
 import { ref, computed } from 'vue'
 import { Icon } from '@iconify/vue'
-import router from '@/router/index'
-
-
-
-
 import { useGeneralStore } from '@/stores/general'
 const generalStore = useGeneralStore()
 
 const filterConfig = generalStore.getFilters
 
 const filter = computed(() => {
-    console.log(filterConfig.find((filter) => filter.slug === steps.value[currentStep.value - 1].type));
     return filterConfig.find((filter) => filter.slug === steps.value[currentStep.value - 1].type)
 })
 
@@ -179,7 +173,6 @@ const back = () => {
     }
 }
 const next = () => {
-    console.log(currentStep.value, steps.value.length);
     if (currentStep.value <= steps.value.length) {
         currentStep.value++
     }
