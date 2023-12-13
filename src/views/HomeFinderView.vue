@@ -1,15 +1,8 @@
 <template>
   <section class="woningzoeker">
     <Header />
-
-    Woningzoeker
-
-    <br />
     <HouseMap v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
-
-    <button @click="setFilterOverlay(true)">Hier komt de filterknop</button>
-    <button @click="setCompareOverlay(true)">Hier komt de compare knop</button>
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"

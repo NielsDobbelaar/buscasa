@@ -1,57 +1,66 @@
 <template>
-  <article>
-    <section className="woningZoekerSection">
-      <h2>Woningzoeker:</h2>
-      <div className="wrapper">
-        <div className="scrollWrapper" id="scroll">
-          <div
-            className="backgroundIMG"
-            :style="{
-              width: mapWidth,
-              backgroundImage: backgroundURL
-            }"
-          >
-            <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
-              <polygon
-                class="trace"
-                v-for="poly in filteredHotspotsOnCurrentMap"
-                @click="polyClicked(poly.entity_id)"
-                :key="poly.svg"
-                :points="poly.svg"
-                :fill="getPolygonColor(poly.entity_id)"
-              />
-            </svg>
-            <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
-              <polygon
-                class="trace"
-                v-for="poly in filteredSections"
-                @click="polyClicked(poly.layer_pointer)"
-                :key="poly.svg"
-                :points="poly.svg"
-                :fill="getPolygonColor(poly.layer_pointer)"
-              />
-            </svg>
-          </div>
+  <section className="woningZoekerSection">
+    <div className="wrapper">
+      <div className="scrollWrapper" id="scroll">
+        <div
+          className="backgroundIMG"
+          :style="{
+            width: mapWidth,
+            backgroundImage: backgroundURL
+          }"
+        >
+          <svg v-if="map !== 0" viewBox="0 0 1920 780" id="floormap">
+            <polygon
+              class="trace"
+              v-for="poly in filteredHotspotsOnCurrentMap"
+              @click="polyClicked(poly.entity_id)"
+              :key="poly.svg"
+              :points="poly.svg"
+              :fill="getPolygonColor(poly.entity_id)"
+            />
+          </svg>
+          <svg v-if="map === 0" viewBox="0 0 1920 780" id="floormap">
+            <polygon
+              class="trace"
+              v-for="poly in filteredSections"
+              @click="polyClicked(poly.layer_pointer)"
+              :key="poly.svg"
+              :points="poly.svg"
+              :fill="getPolygonColor(poly.layer_pointer)"
+            />
+          </svg>
         </div>
-        <section className="zoomButtonsSection">
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(false)">-</button>
-          <button className="zoomButtonsSectionButton" @click="zoomInOut(true)">+</button>
-        </section>
-        <section className="changeMapButtonsSection">
-          <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
-            &lt;
-          </button>
-        </section>
       </div>
-      <!-- todo Later kijken naar implementatie legenda -->
-      <!-- <section className="legendSection">
+      <section className="zoomButtonsSection">
+        <button
+          :disabled="zoom <= 1700"
+          className="zoomButtonsSectionButton"
+          @click="zoomInOut(false)"
+        >
+          -
+        </button>
+        <button
+          :disabled="zoom >= 2300"
+          className="zoomButtonsSectionButton"
+          @click="zoomInOut(true)"
+        >
+          +
+        </button>
+      </section>
+      <section className="changeMapButtonsSection">
+        <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
+          &lt;
+        </button>
+      </section>
+    </div>
+    <!-- todo Later kijken naar implementatie legenda -->
+    <!-- <section className="legendSection">
         <div v-for="status in data.statuses" :key="status.id" className="legend">
           <div className="legendCircle" :style="{ backgroundColor: status.color }"></div>
           - {{ status.name }}
         </div>
       </section> -->
-    </section>
-  </article>
+  </section>
 </template>
 
 <script setup>
@@ -71,7 +80,7 @@ const appliedFilters = computed(() => {
 const filters = generalStore.getFilters
 
 const opacity = '5b'
-const zoom = ref(720)
+const zoom = ref(1700)
 const map = ref(0)
 
 const layer_id = computed(() => {
@@ -174,8 +183,8 @@ const getPolygonColor = (plotID) => {
 const resetMap = () => {
   const scrollDiv = document.getElementById('scroll')
   if (scrollDiv) {
-    scrollDiv.scrollLeft = 155
-    zoom.value = 720
+    scrollDiv.scrollLeft = 630
+    zoom.value = 1700
   }
 }
 
@@ -197,12 +206,12 @@ const previousMap = () => {
 }
 
 const zoomInOut = (increment) => {
-  if (increment && zoom.value !== 1220) {
+  if (increment && zoom.value !== 2300) {
     zoom.value = zoom.value + 100
     return
   }
 
-  if (!increment && zoom.value !== 720) {
+  if (!increment && zoom.value !== 1700) {
     zoom.value = zoom.value - 100
   }
 }
@@ -229,12 +238,6 @@ const zoomInOut = (increment) => {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-article {
-  width: 100vw;
-  height: 80vh;
-  margin: 0 auto;
 }
 
 .titleSection {
@@ -277,7 +280,7 @@ article {
 .wrapper {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 100%;
 }
 
 .scrollWrapper {
@@ -290,6 +293,7 @@ article {
 
 .woningZoekerSection {
   position: relative;
+  height: 82vh;
 }
 
 .backgroundIMG {
@@ -318,6 +322,7 @@ article {
 }
 
 .zoomButtonsSectionButton {
+  display: block;
   font-size: 130%;
   width: 40px;
   height: 40px;
@@ -328,6 +333,10 @@ article {
   text-align: center;
   background-color: #c69308;
   border: 0;
+}
+
+.zoomButtonsSectionButton:disabled {
+  background-color: var(--clr-grey);
 }
 
 .changeMapButtonsSection {

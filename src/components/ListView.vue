@@ -1,7 +1,6 @@
 <template>
   <article>
     <section className="lijstweergave_section">
-      <h2>Lijstweergave:</h2>
       <ListViewCard v-for="item in filteredData" :item="item" :key="item.id" />
       <section v-if="filteredData.length === 0">
         <h4>Geen woningen gevonden die voldoen aan de filters</h4>
