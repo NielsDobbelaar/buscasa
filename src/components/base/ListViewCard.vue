@@ -10,10 +10,7 @@
 </template>
 
 <script setup>
-import { useGeneralStore } from '@/stores/general'
 const { item } = defineProps(['item'])
-
-const generalStore = useGeneralStore()
 </script>
 
 <style>
