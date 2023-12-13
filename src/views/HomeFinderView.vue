@@ -1,7 +1,7 @@
 <template>
+  <Header />
   <section class="woningzoeker">
-    <Header />
-    <HouseMap v-if="canShowHouses" :data="houses" />
+    <HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
     <ListView v-if="canShowListView" :data="houses" />
 
     <FilterOverlay
@@ -17,13 +17,13 @@
     <transition name="from-bottom" mode="both">
       <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" />
     </transition>
-    <Footer
-      @openVergelijkingsTool="setCompareOverlay(true)"
-      @openFilterTool="setFilterOverlay(true)"
-      @lijstMapSwitch="setDisplayType"
-      :isMapOpen="canShowHouses"
-    />
   </section>
+  <Footer
+    @openVergelijkingsTool="setCompareOverlay(true)"
+    @openFilterTool="setFilterOverlay(true)"
+    @lijstMapSwitch="setDisplayType()"
+    :isMapOpen="canShowHouses"
+  />
 </template>
 
 <script setup>
@@ -109,6 +109,7 @@ const canShowListView = computed(() => {
 
 .woningzoeker {
   position: relative;
-  height: 100vh;
+  height: 82vh;
+  overflow: scroll;
 }
 </style>

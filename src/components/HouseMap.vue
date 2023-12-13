@@ -48,9 +48,7 @@
         </button>
       </section>
       <section className="changeMapButtonsSection">
-        <button className="zoomButtonsSectionButton" v-if="map !== 0" @click="previousMap()">
-          &lt;
-        </button>
+        <button className="zoomButtonsSectionButton" @click="previousMap()">&lt;</button>
       </section>
     </div>
     <!-- todo Later kijken naar implementatie legenda -->
@@ -72,6 +70,7 @@ import checkFilter from '@/utils/checkFilter'
 const generalStore = useGeneralStore()
 
 const { data } = defineProps(['data'])
+const emit = defineEmits(['closeMapView'])
 
 const appliedFilters = computed(() => {
   return generalStore.getAppliedFilters
@@ -202,6 +201,8 @@ const previousMap = () => {
   if (map.value !== 0) {
     map.value = 0
     resetMap()
+  } else {
+    emit('closeMapView')
   }
 }
 
@@ -244,29 +245,8 @@ const zoomInOut = (increment) => {
   text-align: left;
 }
 
-.titleSection_Title {
-  margin-bottom: 0;
-  font-size: 150%;
-  color: #c69308;
-}
-
 .titleSection_Version {
   margin-top: 0;
-}
-
-.ResultatenSection {
-  margin: 0;
-  margin-bottom: 10vh;
-}
-
-.ResultatenSection_Button {
-  padding: 10px;
-  margin-top: 0;
-  border-radius: 3px;
-  font-size: 100%;
-  color: white;
-  background-color: #c69308;
-  border: 1px black;
 }
 
 .ResultatenSection_Title {
@@ -293,7 +273,7 @@ const zoomInOut = (increment) => {
 
 .woningZoekerSection {
   position: relative;
-  height: 82vh;
+  height: 100%;
 }
 
 .backgroundIMG {
@@ -331,7 +311,7 @@ const zoomInOut = (increment) => {
   margin-left: 5px;
   color: white;
   text-align: center;
-  background-color: #c69308;
+  background-color: var(--clr-primary);
   border: 0;
 }
 
