@@ -14,11 +14,11 @@
 
     <router-link to="/woningzoeker/vergelijk">Vergelijken</router-link>
 
-    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen" @closeFilterOverlay="setFilterOverlay(false)" />
+    <FilterOverlay :isFilterOverlayOpen="isFilterOverlayOpen" @closeFilterOverlay="setFilterOverlay(false)" :data="houses"/>
 
     <CompareOverlay :isCompareOverlayOpen="isCompareOverlayOpen" @closeCompareOverlay="setCompareOverlay(false)" />
 
-    <KeuzeHulpOverlay v-if="isKeuzeHulpOverlayOpen" @closeKeuzeHulpOverlay="setKeuzeHulpOverlay(false)" />
+    <KeuzeHulpOverlay v-if="isKeuzeHulpOverlayOpen" @closeKeuzeHulpOverlay="setKeuzeHulpOverlay(false)"  :data="houses" />
 
     <transition name="from-bottom" mode="both">
       <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"

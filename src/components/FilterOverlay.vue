@@ -14,6 +14,13 @@
       </section>
     </section>
 
+    <span class="matchAmount" :class="{ errorMatches: filteredData.length === 0 }">
+      <span>
+        {{ filteredData.length }} matches
+      </span>
+      <Icon v-if="filteredData.length === 0" icon="ic:error-outline" height="20" />
+    </span>
+
     <!-- Filters -->
     <section v-for="(filter, i) in filterConfig" :key="filter.slug">
       <p class="filterHeading">
@@ -25,14 +32,8 @@
       <!-- Checkbox type -->
       <section class="filterValues" v-if="filter.type.type === 'checkbox'">
         <section class="filterValue" v-for="value in filter.values" :key="value">
-          <input
-            class="invisibleInput"
-            type="checkbox"
-            v-model="appliedFilters[i][filter.slug]"
-            :id="value"
-            :name="filter.slug"
-            :value="value"
-          />
+          <input class="invisibleInput" type="checkbox" v-model="appliedFilters[i][filter.slug]" :id="value"
+            :name="filter.slug" :value="value" />
           <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
@@ -40,30 +41,33 @@
       <!-- Range type -->
       <section class="filterValues" v-if="filter.type.type === 'range'">
         <!-- TODO: Misschien package voor gebruiken voor fancy slider met min en max? -->
-        <section>
-          <input
-            v-model="appliedFilters[i][filter.slug]"
-            type="range"
-            :id="filter.slug"
-            :name="filter.slug"
-            :min="filter.values.min"
-            :max="filter.values.max"
-            :step="filter.values.stepSize"
-          />
+        <section class="dropdownGroup">
+          <section class="dropdownGroupItem">
+
+            <label :for="filter.slug + 'max'">Minimum</label>
+            <select :name="filter.slug + 'min'" :id="filter.slug + 'min'" v-model="appliedFilters[i][filter.slug]['min']">
+              <option v-for="(option, index) in dropdownRangeOptions(filter)" :value="option" :key="index">
+                {{ option }}
+              </option>
+            </select>
+          </section>
+          <section class="dropdownGroupItem">
+            <label :for="filter.slug + 'max'">Maximum</label>
+
+            <select :name="filter.slug + 'max'" :id="filter.slug + 'max'" v-model="appliedFilters[i][filter.slug]['max']">
+              <option v-for="(option, index) in dropdownRangeOptions(filter)" :value="option" :key="index">
+                {{ option }}
+              </option>
+            </select>
+          </section>
         </section>
       </section>
 
       <!-- Radio type -->
       <section class="filterValues" v-if="filter.type.type === 'radio'">
         <section class="filterValue" v-for="value in filter.values" :key="value">
-          <input
-            class="invisibleInput"
-            v-model="appliedFilters[i][filter.slug]"
-            type="radio"
-            :id="value"
-            :name="filter.slug"
-            :value="value"
-          />
+          <input class="invisibleInput" v-model="appliedFilters[i][filter.slug]" type="radio" :id="value"
+            :name="filter.slug" :value="value" />
           <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
@@ -71,14 +75,8 @@
       <!-- Status type-->
       <section class="filterValues" v-if="filter.type.type === 'status'">
         <section class="filterValue" v-for="value in Object.keys(filter.values)" :key="value">
-          <input
-            class="invisibleInput"
-            v-model="appliedFilters[i][filter.slug]"
-            type="radio"
-            :id="value"
-            :name="value"
-            :value="value"
-          />
+          <input class="invisibleInput" v-model="appliedFilters[i][filter.slug]" type="radio" :id="value" :name="value"
+            :value="value" />
           <label class="radioCheckboxLabel" :for="value">{{ value }}</label>
         </section>
       </section>
@@ -89,17 +87,27 @@
 </template>
 
 <script setup>
-import { defineProps, ref, watch } from 'vue'
+import { defineProps, ref, watch, computed } from 'vue'
 import { useGeneralStore } from '@/stores/general'
+import checkFilter from '@/utils/checkFilter'
+import { Icon } from '@iconify/vue'
 const generalStore = useGeneralStore()
 
-const props = defineProps(['isFilterOverlayOpen'])
+
+const props = defineProps(['isFilterOverlayOpen', 'data'])
 const emit = defineEmits(['closeFilterOverlay'])
 const filterConfig = generalStore.getFilters
 
 // Filter event
 console.log('appliedfilters');
 let appliedFilters = ref(generalStore.getAppliedFilters)
+
+const filteredData = computed(() => {
+  const filteredPlots = props.data.plots.filter((plot) => {
+    return checkFilter(props.data, appliedFilters, filterConfig, plot.id)
+  })
+  return filteredPlots
+})
 
 watch(
   appliedFilters,
@@ -109,6 +117,15 @@ watch(
   },
   { deep: true }
 )
+
+// dropdown range options
+const dropdownRangeOptions = (filter) => {
+  const options = []
+  for (let i = filter.values.min; i <= filter.values.max; i += filter.values.stepSize) {
+    options.push(i)
+  }
+  return options
+}
 
 // Overlay
 const closeOverlay = () => {
@@ -124,7 +141,8 @@ const initializeFilterObject = () => {
     const filter = filterConfig[i]
 
     const multiple = ['checkbox', 'status']
-    const single = ['radio', 'range']
+    const single = ['radio']
+    const range = ['range']
 
     if (multiple.includes(filter.type.type)) {
       appliedFilters.value.push({
@@ -134,11 +152,18 @@ const initializeFilterObject = () => {
       appliedFilters.value.push({
         [filter.slug]: null
       })
+    } else if (range.includes(filter.type.type)) {
+      appliedFilters.value.push({
+        [filter.slug]: {
+          min: filter.default.min,
+          max: filter.default.max
+        }
+      })
     }
   }
 }
 
-if(generalStore.amountOfAppliedFilters === 0) {
+if (generalStore.amountOfAppliedFilters === 0) {
   initializeFilterObject()
 }
 
@@ -146,6 +171,43 @@ initializeFilterObject()
 </script>
 
 <style scoped>
+.dropdownGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+}
+.dropdownGroupItem {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+select {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: var(--clr-white);
+  font-size: 1rem;
+  border: 2px solid var(--clr-primary);
+  transition: 0.15s all;
+}
+
+select:hover {
+  cursor: pointer;
+  border-color: var(--clr-dark-grey);
+}
+
+.matchAmount {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.errorMatches {
+  color: red;
+
+}
+
 .filterOverlay__wrapper {
   padding: 1rem;
   background-color: var(--clr-white);
@@ -183,15 +245,16 @@ initializeFilterObject()
   font-size: 100%;
 }
 
-input[type='radio']:checked + .radioCheckboxLabel {
+input[type='radio']:checked+.radioCheckboxLabel {
   background: #283040;
   color: white;
 }
 
-input[type='checkbox']:checked + .radioCheckboxLabel {
+input[type='checkbox']:checked+.radioCheckboxLabel {
   background: #283040;
   color: white;
 }
+
 .filterHeading {
   font-weight: 500;
   font-size: 20px;
@@ -204,6 +267,7 @@ input[type='checkbox']:checked + .radioCheckboxLabel {
   justify-content: space-between;
   align-items: center;
 }
+
 .FiltersHeader_heading {
   font-weight: 700;
   font-size: 25px;
@@ -218,6 +282,7 @@ input[type='checkbox']:checked + .radioCheckboxLabel {
   justify-content: space-between;
   align-items: center;
 }
+
 .FiltersHeader_buttonsSection_button {
   height: 2rem;
   padding: 0.25rem;

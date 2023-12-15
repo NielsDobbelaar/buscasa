@@ -3,10 +3,18 @@
         <section>
             <section class="keuzeHulp__wrapper">
                 <section class="keuzeHulp__header">
-                    <section class="keuzeHulp__backButton" @click="closeOverlay()">
-                        <Icon icon="lucide:arrow-left" height="25" />
+                    <section class="keuzeHulp__headerBtnAndTitle">
+                        <section class="keuzeHulp__backButton" @click="closeOverlay()">
+                            <Icon icon="lucide:arrow-left" height="25" />
+                        </section>
+                        <h1>Keuzehulp</h1>
                     </section>
-                    <h1>Keuzehulp</h1>
+                    <span class="matchAmount" :class="{ errorMatches: filteredData.length === 0 }">
+                        <span>
+                            {{ filteredData.length }} matches
+                        </span>
+                        <Icon v-if="filteredData.length === 0" icon="ic:error-outline" height="20" />
+                    </span>
                 </section>
                 <section class="keuzeHulp__description">
                     Ontdek welke woning het beste aansluit bij uw wensen.
@@ -23,8 +31,8 @@
                     <section class="filterValues" v-if="filter.type.type === 'checkbox'">
                         <section class="filterValue" v-for="value in filter.values" :key="value">
                             <input class="invisibleInput" type="checkbox"
-                                v-model="appliedFilters[currentStep - 1][filter.slug]" :id="value + 'keuzehulp'" :name="filter.slug + 'keuzehulp'"
-                                :value="value" />
+                                v-model="appliedFilters[currentStep - 1][filter.slug]" :id="value + 'keuzehulp'"
+                                :name="filter.slug + 'keuzehulp'" :value="value" />
                             <label class="radioCheckboxLabel" :for="value + 'keuzehulp'">{{ value }}</label>
                         </section>
                     </section>
@@ -32,10 +40,29 @@
                     <!-- Range type -->
                     <section class="filterValues" v-if="filter.type.type === 'range'">
                         <!-- TODO: Misschien package voor gebruiken voor fancy slider met min en max? -->
-                        <section>
-                            <input v-model="appliedFilters[currentStep - 1][filter.slug]" type="range" :id="filter.slug  + 'keuzehulp'"
-                                :name="filter.slug + 'keuzehulp'" :min="filter.values.min" :max="filter.values.max"
-                                :step="filter.values.stepSize" />
+                        <section class="dropdownGroup">
+                            <section class="dropdownGroupItem">
+
+                                <label :for="filter.slug + 'max'">Minimum</label>
+                                <select :name="filter.slug + 'min'" :id="filter.slug + 'min'"
+                                    v-model="appliedFilters[currentStep - 1][filter.slug]['min']">
+                                    <option v-for="(option, index) in dropdownRangeOptions(filter)" :value="option"
+                                        :key="index">
+                                        {{ option }}
+                                    </option>
+                                </select>
+                            </section>
+                            <section class="dropdownGroupItem">
+                                <label :for="filter.slug + 'max'">Maximum</label>
+
+                                <select :name="filter.slug + 'max'" :id="filter.slug + 'max'"
+                                    v-model="appliedFilters[currentStep - 1][filter.slug]['max']">
+                                    <option v-for="(option, index) in dropdownRangeOptions(filter)" :value="option"
+                                        :key="index">
+                                        {{ option }}
+                                    </option>
+                                </select>
+                            </section>
                         </section>
                     </section>
 
@@ -84,13 +111,33 @@ import { watch } from 'vue'
 import { ref, computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { useGeneralStore } from '@/stores/general'
+import checkFilter from '@/utils/checkFilter'
 const generalStore = useGeneralStore()
 
+const { data } = defineProps(['data'])
+
 const filterConfig = generalStore.getFilters
+
+const filteredData = computed(() => {
+    const filteredPlots = data.plots.filter((plot) => {
+        return checkFilter(data, appliedFilters, filterConfig, plot.id)
+    })
+    return filteredPlots
+})
 
 const filter = computed(() => {
     return filterConfig.find((filter) => filter.slug === steps.value[currentStep.value - 1].type)
 })
+
+// dropdown range options
+const dropdownRangeOptions = (filter) => {
+    const options = []
+    for (let i = filter.values.min; i <= filter.values.max; i += filter.values.stepSize) {
+        options.push(i)
+    }
+    return options
+}
+
 
 let appliedFilters = ref([])
 
@@ -109,7 +156,8 @@ const initializeFilterObject = () => {
         const filter = filterConfig[i]
 
         const multiple = ['checkbox', 'status']
-        const single = ['radio', 'range']
+        const single = ['radio']
+        const range = ['range']
 
         if (multiple.includes(filter.type.type)) {
             appliedFilters.value.push({
@@ -118,6 +166,13 @@ const initializeFilterObject = () => {
         } else if (single.includes(filter.type.type)) {
             appliedFilters.value.push({
                 [filter.slug]: null
+            })
+        } else if (range.includes(filter.type.type)) {
+            appliedFilters.value.push({
+                [filter.slug]: {
+                    min: filter.default.min,
+                    max: filter.default.max
+                }
             })
         }
     }
@@ -185,6 +240,53 @@ const next = () => {
 </script>
 
 <style scoped>
+.dropdownGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+.dropdownGroupItem {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+select {
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: var(--clr-white);
+    font-size: 1rem;
+    border: 2px solid var(--clr-primary);
+    transition: 0.15s all;
+}
+
+select:hover {
+    cursor: pointer;
+    border-color: var(--clr-dark-grey);
+}
+
+.matchAmount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.errorMatches {
+    color: red;
+
+}
+
+.keuzeHulp__headerBtnAndTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+
+}
+
 .keuzeHulpDialog {
     background-color: var(--clr-white);
     position: absolute;
@@ -216,11 +318,14 @@ const next = () => {
 .keuzeHulp__content {
     font-weight: bold;
     font-size: 1.5rem;
+    overflow-x: scroll;
+    max-height: 60vh;
 }
 
 .keuzeHulp__header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 1rem;
     margin-bottom: 2rem;
 }

@@ -15,8 +15,8 @@ const checkFilter = (data, appliedFilters, filters, plotID) => {
         }
         break
       case 'range':
-        if (currentFilter[filterName] && currentFilter[filterName].length !== 0) {
-          if (plot[filterName] < currentFilter[filterName]) return false
+        if (currentFilter[filterName] && currentFilter[filterName]['min'] !== undefined && currentFilter[filterName]['max'] !== undefined) {
+          if (plot[filterName] < currentFilter[filterName]['min'] || plot[filterName] > currentFilter[filterName]['max']) return false
         }
         break
       case 'radio':
