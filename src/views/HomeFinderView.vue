@@ -7,6 +7,7 @@
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
       @closeFilterOverlay="setFilterOverlay(false)"
+      :data="houses"
     />
 
     <CompareOverlay
@@ -14,13 +15,17 @@
       @closeCompareOverlay="setCompareOverlay(false)"
     />
 
+    <KeuzeHulpOverlay v-if="isKeuzeHulpOverlayOpen" @closeKeuzeHulpOverlay="setKeuzeHulpOverlay(false)"  :data="houses" />
+
     <transition name="from-bottom" mode="both">
-      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" />
+      <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
+        @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
     </transition>
   </section>
   <Footer
     @openVergelijkingsTool="setCompareOverlay(true)"
     @openFilterTool="setFilterOverlay(true)"
+    @openKeuzeHulp="setKeuzeHulpOverlay(true)"
     @lijstMapSwitch="setDisplayType()"
     :isMapOpen="canShowHouses"
   />
@@ -30,6 +35,7 @@
 import Header from '@/components/Header.vue'
 import HouseMap from '@/components/HouseMap.vue'
 import ListView from '@/components/ListView.vue'
+import KeuzeHulpOverlay from '@/components/KeuzeHulpOverlay.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
 import { ref, computed } from 'vue'
 import CompareOverlay from '@/components/CompareOverlay.vue'
@@ -47,6 +53,7 @@ const housesStore = useHousesStore()
 // Filters
 const isFilterOverlayOpen = ref(false)
 const isCompareOverlayOpen = ref(false)
+const isKeuzeHulpOverlayOpen = ref(false)
 
 const isSingleHouseOverlayOpen = computed(() => {
   return generalStore.getIsSingleHouseOverlayOpen
@@ -57,6 +64,12 @@ const setFilterOverlay = (value) => {
 }
 const setCompareOverlay = (value) => {
   isCompareOverlayOpen.value = value
+}
+const setSingleHouseOverlay = (value) => {
+  isSingleHouseOverlayOpen.value = value
+}
+const setKeuzeHulpOverlay = (value) => {
+  isKeuzeHulpOverlayOpen.value = value
 }
 
 // map / lijstweergave switch

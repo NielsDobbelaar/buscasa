@@ -85,6 +85,7 @@ const isSingleHouseOverlayOpen = computed(() => {
 
 // compare
 const compareIsChecked = ref(false)
+compareIsChecked.value = housesStore.isHouseInCompare(houseId.value)
 watch(
   () => compareIsChecked.value,
   (value) => {
@@ -134,6 +135,7 @@ const closeOverlay = () => {
 //       closeOverlay()
 //   }
 // })
+
 
 setTimeout(() => {
   // set backdrop
@@ -408,7 +410,7 @@ const houseInfo = computed(() => {
 .singleHouse__container {
   /* center in screen */
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   border: none;

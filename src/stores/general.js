@@ -251,6 +251,18 @@ export const useGeneralStore = defineStore('general', {
         getSingleHouseOverlayId(){
             return this.singleHouseOverlayId
         },
+        amountOfAppliedFilters() {
+            let amtEmpty = 0;
+            for (let i = 0; i < this.filters.length; i++) {
+                const filter = this.filters[i];
+                
+                if(this.appliedFilters[i] === undefined) continue;
+                if(this.appliedFilters[i][filter.slug] === null || this.appliedFilters[i][filter.slug]?.length < 1) {
+                    amtEmpty++;
+                }
+            }
+            return this.filters.length - amtEmpty;
+        }
     },
     actions: {
         setAppliedFilters(data) {

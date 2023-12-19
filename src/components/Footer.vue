@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <section v-if="!props.isMapOpen" class="footerContent__wrapper">
-      <button class="button solidButton">
+      <button class="button solidButton" @click="emit('openKeuzeHulp')">
         <Icon class="menuButton" icon="material-symbols:help-outline" />
         <p class="button_text">Keuzehulp</p>
       </button>
@@ -12,7 +12,7 @@
     </section>
 
     <section v-if="props.isMapOpen" class="footerContent__wrapper">
-      <button class="iconOnlyButton outlineButton">
+      <button class="iconOnlyButton outlineButton" @click="emit('openKeuzeHulp')">
         <Icon width="1.5rem" height="1.5rem" icon="material-symbols:help-outline" />
       </button>
       <button class="button outlineButton" @click="emit('openVergelijkingsTool')">
@@ -44,19 +44,24 @@ const props = defineProps(['isMapOpen'])
 
 footer {
   background-color: var(--clr-white);
-  padding: 1rem;
   position: absolute;
   bottom: 0;
   z-index: 1;
-  width: 100vw;
+  width: 100%;
   height: 8vh;
   box-shadow: 0px -2px 5px 0px rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .footerContent__wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 .footerContent__logo {
@@ -67,7 +72,7 @@ footer {
 .iconOnlyButton {
   font-size: 1rem;
   border: 2px solid var(--clr-secondary);
-  padding: 0.3rem 0.3rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
@@ -76,11 +81,13 @@ footer {
 
 .button {
   border: 2px solid var(--clr-secondary);
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .button_text {

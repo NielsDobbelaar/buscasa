@@ -48,7 +48,10 @@
         </button>
       </section>
       <section className="changeMapButtonsSection">
-        <button className="zoomButtonsSectionButton" @click="previousMap()">&lt;</button>
+        <button className="zoomButtonsSectionButton" @click="previousMap()">
+          <!-- left arrow -->
+          <Icon icon="uil:arrow-left" height="30" />
+        </button>
       </section>
     </div>
     <!-- todo Later kijken naar implementatie legenda -->
@@ -62,6 +65,7 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue';
 import { ref, onMounted, computed } from 'vue'
 import initMap from '@/assets/data/initMap.json'
 import { useGeneralStore } from '@/stores/general'
@@ -301,7 +305,9 @@ const zoomInOut = (increment) => {
 }
 
 .zoomButtonsSectionButton {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 130%;
   width: 40px;
   height: 40px;

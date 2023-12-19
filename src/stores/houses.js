@@ -6,7 +6,7 @@ export const useHousesStore = defineStore('houses', {
   state: () => {
     return {
       houses: houseData,
-      comparingNumbers: [3977, 3161, 3181, 3183],
+      comparingNumbers: [],
     }
   },
   getters: {
@@ -18,6 +18,9 @@ export const useHousesStore = defineStore('houses', {
     },
     getHouseById: (state) => (id) => {
       return state.houses.plots.find((house) => house.id === id)
+    },
+    isHouseInCompare: (state) => (id) => {
+      return state.comparingNumbers.includes(id)
     },
   },
   actions: {

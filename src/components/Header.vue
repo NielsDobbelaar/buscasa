@@ -2,7 +2,7 @@
   <header class="header">
     <section class="headerContent__wrapper">
       <section class="headerItem headerContent__menu">
-        <Icon class="menuButton" icon="jam:menu" height="40" @click="toggleNav()" />
+        <Icon class="menuButton" icon="jam:menu" height="40"  />
       </section>
       <section class="headerItem headerContent__logo">
         <p>BUSCASA</p>
@@ -20,7 +20,7 @@
         <li class="nav__item">
           <router-link to="/about">About</router-link>
         </li>
-        <Icon class="closeButton" icon="jam:close" height="40" @click="toggleNav()" />
+        <Icon class="closeButton" icon="jam:close" height="40"  />
       </ul>
     </nav>
   </header>
@@ -32,9 +32,9 @@ import { ref } from 'vue'
 
 const isNavOpen = ref(false)
 
-const toggleNav = () => {
-  isNavOpen.value = !isNavOpen.value
-}
+// const toggleNav = () => {
+//   isNavOpen.value = !isNavOpen.value
+// }
 </script>
 
 <style scoped>

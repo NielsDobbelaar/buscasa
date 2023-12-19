@@ -191,6 +191,7 @@ const removeFromComparison = (nr) => {
 
 }
 
+
 .comparison__housePropertyStatus {
     height: 0.75rem;
     width: 0.75rem;
