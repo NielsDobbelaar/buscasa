@@ -33,22 +33,22 @@
       </div>
       <section className="zoomButtonsSection">
         <button
-          :disabled="zoom <= 1700"
-          className="zoomButtonsSectionButton"
-          @click="zoomInOut(false)"
-        >
-          -
-        </button>
-        <button
           :disabled="zoom >= 2300"
           className="zoomButtonsSectionButton"
           @click="zoomInOut(true)"
         >
           +
         </button>
+        <button
+          :disabled="zoom <= 1700"
+          className="zoomButtonsSectionButton"
+          @click="zoomInOut(false)"
+        >
+          -
+        </button>
       </section>
       <section className="changeMapButtonsSection">
-        <button className="zoomButtonsSectionButton" @click="previousMap()">
+        <button className="changeMapButton" @click="previousMap()">
           <!-- left arrow -->
           <Icon icon="uil:arrow-left" height="30" />
         </button>
@@ -298,10 +298,10 @@ const zoomInOut = (increment) => {
   bottom: 10px;
   right: 10px;
   z-index: 0;
-  width: 110px;
+  height: 110px;
   display: flex;
-  flex-direction: row;
-  justify-content: right;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .zoomButtonsSectionButton {
@@ -314,14 +314,25 @@ const zoomInOut = (increment) => {
   padding: 0;
   margin: 0;
   margin-left: 5px;
-  color: white;
+  color: var(--clr-primary);
   text-align: center;
-  background-color: var(--clr-primary);
+  background-color: var(--clr-white);
   border: 0;
 }
 
+.zoomButtonsSectionButton:nth-child(1) {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.zoomButtonsSectionButton:nth-child(2) {
+  margin-top: 0.15rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
 .zoomButtonsSectionButton:disabled {
-  background-color: var(--clr-grey);
+  background-color: rgb(182, 182, 182);
 }
 
 .changeMapButtonsSection {
@@ -334,6 +345,21 @@ const zoomInOut = (increment) => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.changeMapButton {
+  display: block;
+  font-size: 130%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  margin-left: 5px;
+  color: white;
+  text-align: center;
+  background-color: var(--clr-primary);
+  border: 0;
+  border-radius: 0.25rem;
 }
 
 .legendSection {

@@ -2,7 +2,7 @@
   <Header />
   <section class="woningzoeker">
     <HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
-    <ListView v-if="canShowListView" :data="houses" />
+    <ListView v-if="canShowListView" @showMapView="setDisplayType()" :data="houses" />
 
     <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"

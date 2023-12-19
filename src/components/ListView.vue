@@ -1,7 +1,15 @@
 <template>
   <article>
-    <section className="lijstweergave_section">
-      <ListViewCard v-for="item in houseTypes" :item="item" :key="item" />
+    <section class="titleSection">
+      <h1 class="listView_title">Woningtypes</h1>
+    </section>
+    <section className="listview_section">
+      <ListViewCard
+        @lijstMapSwitch="emit('showMapView')"
+        v-for="item in houseTypes"
+        :item="item"
+        :key="item"
+      />
     </section>
   </article>
 </template>
@@ -10,6 +18,8 @@
 import { useGeneralStore } from '@/stores/general'
 import ListViewCard from './base/ListViewCard.vue'
 
+const emit = defineEmits(['showMapView'])
+
 const generalStore = useGeneralStore()
 
 const houseTypes = generalStore.getHouseTypes
@@ -17,11 +27,22 @@ const houseTypes = generalStore.getHouseTypes
 
 <style>
 article {
-  width: 100vw;
+  width: 80vw;
   margin: 0 auto;
 }
 
-.lijstweergave_section {
+.titleSection {
+  margin-top: 0.5rem;
+}
+
+.listView_title {
+  font-size: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: bold;
+  color: var(--clr-primary);
+}
+
+.listview_section {
   width: 100%;
 }
 </style>
