@@ -1,10 +1,12 @@
 <template>
   <Header />
   <section class="woningzoeker">
-    <HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
-    <ListView v-if="canShowListView" @showMapView="setDisplayType()" :data="houses" />
+    <!--<HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
+    <ListView v-if="canShowListView" @showMapView="setDisplayType()" :data="houses" /> -->
+    <HouseTypeDetail />
+  </section>
 
-    <FilterOverlay
+    <!--<FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
       @closeFilterOverlay="setFilterOverlay(false)"
       :data="houses"
@@ -28,13 +30,14 @@
     @openKeuzeHulp="setKeuzeHulpOverlay(true)"
     @lijstMapSwitch="setDisplayType()"
     :isMapOpen="canShowHouses"
-  />
+  />-->
 </template>
 
 <script setup>
 import Header from '@/components/Header.vue'
 import HouseMap from '@/components/HouseMap.vue'
 import ListView from '@/components/ListView.vue'
+import HouseTypeDetail from '@/components/HouseTypeDetail.vue'
 import KeuzeHulpOverlay from '@/components/KeuzeHulpOverlay.vue'
 import FilterOverlay from '@/components/FilterOverlay.vue'
 import { ref, computed } from 'vue'
