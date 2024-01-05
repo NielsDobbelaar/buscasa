@@ -1,12 +1,12 @@
 <template>
   <Header />
   <section class="woningzoeker">
-    <!--<HouseMap @closeMapView="setDisplayType()" v-if="canShowHouses" :data="houses" />
-    <ListView v-if="canShowListView" @showMapView="setDisplayType()" :data="houses" /> -->
-    <HouseTypeDetail />
+    <HouseMap v-if="canShowHouses" :data="houses" @openList="setDisplayType('list')"/>
+    <ListView v-if="canShowListView" :data="houses" @openMap="setDisplayType('map')" @openHouseType="setDisplayType('housetype')" />
+    <HouseTypeDetail v-if="canShowHouseTypeDetail" @openList="setDisplayType('list')" />
   </section>
 
-    <!--<FilterOverlay
+    <FilterOverlay
       :isFilterOverlayOpen="isFilterOverlayOpen"
       @closeFilterOverlay="setFilterOverlay(false)"
       :data="houses"
@@ -23,14 +23,14 @@
       <SingleHouseOverlay v-if="isSingleHouseOverlayOpen" :isSingleHouseOverlayOpen="isSingleHouseOverlayOpen"
         @closeSingleHouseOverlay="setSingleHouseOverlay(false)" :houseId="3977" />
     </transition>
-  </section>
+
   <Footer
     @openVergelijkingsTool="setCompareOverlay(true)"
     @openFilterTool="setFilterOverlay(true)"
     @openKeuzeHulp="setKeuzeHulpOverlay(true)"
-    @lijstMapSwitch="setDisplayType()"
-    :isMapOpen="canShowHouses"
-  />-->
+    @openMap="setDisplayType('map')"
+    :currentView="currentView"
+  />
 </template>
 
 <script setup>
@@ -75,26 +75,26 @@ const setKeuzeHulpOverlay = (value) => {
   isKeuzeHulpOverlayOpen.value = value
 }
 
-// map / lijstweergave switch
-// 0 is map - 1 is lijstweergave
-const currentView = ref(1)
 
-const setDisplayType = () => {
-  if (currentView.value === 0) {
-    currentView.value = 1
-    return
-  }
-  currentView.value = 0
+// 0 is map - 1 is lijstweergave - 2 is housetype detail
+const currentView = ref('list')
+
+const setDisplayType = (value, item) => {
+  currentView.value = value
 }
 
 const houses = housesStore.getHouses
 
 const canShowHouses = computed(() => {
-  return houses && currentView.value === 0
+  return houses && currentView.value === 'map'
 })
 
 const canShowListView = computed(() => {
-  return houses && currentView.value === 1
+  return houses && currentView.value === 'list'
+})
+
+const canShowHouseTypeDetail = computed(() => {
+  return currentView.value === 'housetype'
 })
 </script>
 

@@ -87,11 +87,11 @@
             </section>
             <footer class="footer">
                 <section class="footerContentwrapper">
-                    <button class="button outlineButton" @click="back()">
+                    <button class="button button--brown button--outline" @click="back()">
                         <Icon icon="mingcute:back-2-line" height="20" />
                         Terug
                     </button>
-                    <button class="button solidButton" @click="next()">
+                    <button class="button button--brown" @click="next()">
                         <span v-if="currentStep === steps.length">
                             Toon aanbod
                         </span>

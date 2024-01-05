@@ -19,8 +19,8 @@
         <p class="fact_bubble">Appartement</p>
       </section>
       <section className="buttonSection">
-        <button class="button outlineButton">Meer info</button>
-        <button class="button solidButton" @click="emit('lijstMapSwitch')">Bekijk aanbod</button>
+        <button class="button button--outline" @click="emit('openHouseType')">Meer info</button>
+        <button class="button" @click="emit('openMap')">Bekijk aanbod</button>
       </section>
     </section>
   </article>
@@ -28,7 +28,7 @@
 
 <script setup>
 const { item } = defineProps(['item'])
-const emit = defineEmits(['lijstMapSwitch'])
+const emit = defineEmits(['openMap', 'openHouseType'])
 </script>
 
 <style scoped>
@@ -128,14 +128,5 @@ const emit = defineEmits(['lijstMapSwitch'])
   margin-left: 0.5rem;
   font-size: 1rem;
   font-weight: bold;
-}
-
-.solidButton {
-  background: var(--clr-primary);
-  color: var(--clr-white);
-}
-
-.outlineButton {
-  color: var(--clr-primary);
 }
 </style>

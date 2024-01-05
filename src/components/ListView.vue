@@ -5,7 +5,8 @@
     </section>
     <section className="listview_section">
       <ListViewCard
-        @lijstMapSwitch="emit('showMapView')"
+        @openMap="emit('openMap')"
+        @openHouseType="emit('openHouseType')"
         v-for="item in houseTypes"
         :item="item"
         :key="item"
@@ -18,7 +19,7 @@
 import { useGeneralStore } from '@/stores/general'
 import ListViewCard from './base/ListViewCard.vue'
 
-const emit = defineEmits(['showMapView'])
+const emit = defineEmits(['openMap', 'openHouseType'])
 
 const generalStore = useGeneralStore()
 

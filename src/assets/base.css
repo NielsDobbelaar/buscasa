@@ -79,6 +79,13 @@ ul {
   text-align: center;
   text-decoration: none;
 }
+
+.button .button__icon {
+  fill: var(--clr-white);
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
 .button--outline {
   background-color: transparent;
   color: var(--clr-primary);
@@ -91,4 +98,11 @@ ul {
 .button--brown.button--outline {
   background-color: transparent;
   color: var(--clr-secondary);
+}
+
+.button--icon {
+  padding: 0.5rem 0.5rem;
+}
+.button--brown.button--icon {
+  fill: var(--clr-secondary);
 }

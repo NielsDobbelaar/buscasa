@@ -1,6 +1,11 @@
 <template>
     <article class="houseTypeDetail">
         <section class="houseTypeDetail__header">
+
+            <button class="button button--icon houseTypeDetail__back" @click="emit('openList')">
+                <Icon icon="uil:arrow-left"/>
+            </button>
+    
             <figure class="houseTypeDetail__header-image">
                 <!-- to do: image based on housetype-->
                 <img src="@/assets/img/int_A10.jpg" alt="house"/>
@@ -60,9 +65,13 @@
 <script setup>
     import { useGeneralStore } from '@/stores/general'
     import { ref } from 'vue'
+    import { Icon } from '@iconify/vue';
+
+    const { item } = defineProps(['item']);
+
+    const emit = defineEmits(['openList']);
 
     const tabOpened = ref('description');
-
 </script>
 
 <style scoped>
@@ -73,14 +82,24 @@
         width: 100%;
         position: relative;
     }
-
     .houseTypeDetail__header {
         position: relative;
         width: 100%;
     }
 
+    .houseTypeDetail__back {
+        left: 1rem;
+        position: absolute;
+        top:  1rem;
+        z-index: 2;
+    }
+    .houseTypeDetail__back svg {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
     .houseTypeDetail__header-image {
-        height: 200px;
+        height: 250px;
         overflow: hidden;
         position: relative;
         width: 100%;

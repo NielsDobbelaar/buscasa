@@ -74,7 +74,7 @@ import checkFilter from '@/utils/checkFilter'
 const generalStore = useGeneralStore()
 
 const { data } = defineProps(['data'])
-const emit = defineEmits(['closeMapView'])
+const emit = defineEmits(['openList'])
 
 const appliedFilters = computed(() => {
   return generalStore.getAppliedFilters
@@ -205,7 +205,7 @@ const previousMap = () => {
     map.value = 0
     resetMap()
   } else {
-    emit('closeMapView')
+    emit('openList')
   }
 }
 
