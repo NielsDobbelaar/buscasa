@@ -60,3 +60,35 @@ h2 {
 h3 {
   font-size: 1rem;
 }
+
+ul {
+  list-style-position: inside;
+}
+
+.button {
+  background-color: var(--clr-primary);
+  border: 2px solid var(--clr-primary);
+  border-radius: 5px;
+  color: var(--clr-white);
+  display: flex;
+  font-family: 'DM Sans', sans-serif;;
+  font-weight: 500;
+  font-size: 16px;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+}
+.button--outline {
+  background-color: transparent;
+  color: var(--clr-primary);
+}
+
+.button--brown {
+  background-color: var(--clr-secondary);
+  border: 2px solid var(--clr-secondary);
+}
+.button--brown.button--outline {
+  background-color: transparent;
+  color: var(--clr-secondary);
+}
